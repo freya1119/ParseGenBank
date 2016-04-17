@@ -337,3 +337,40 @@ for (i in 1:3) {
 #auth2= str_replace(str_extract(gb,ref2pattern),ref2pattern,"\\1")
 #author_ref2=append(author_ref2,auth2)
 
+#author and/or consortium for References 1-3 from gb
+#insert an @ after each header in references section
+#reference_keys=c("REFERENCE","AUTHORS","CONSRTM","TITLE","JOURNAL","COMMENT","FEATURES")
+reference_ends=c("REFERENCE","COMMENT","FEATURES")
+for(end in reference_ends){gb=str_replace_all(gb,end,paste("@",end,sep=""))}
+reference_keys=c("AUTHORS","CONSRTM","TITLE","JOURNAL")
+for(key in reference_keys){gb=str_replace_all(gb,key,paste("%",key,sep=""))}
+
+#REFERENCES 1-3
+for (i in 1:3) {
+  auth_pat=paste("REFERENCE ","[^@]+%AUTHORS ([^%]+) %",sep=as.character(i))
+  cons_pat=paste("REFERENCE ","[^@]+%CONSRTM ([^%]+) %",sep=as.character(i))
+  title_pat=paste("REFERENCE ","[^@]+%TITLE ([^%]+) %",sep=as.character(i))
+  journ_pat=paste("REFERENCE ","[^@]+%JOURNAL ([^%@]+) [%@]",sep=as.character(i))
+  auth= str_replace(str_extract(gb,auth_pat),auth_pat,"\\1")
+  cons= str_replace(str_extract(gb,cons_pat),cons_pat,"\\1")
+  title= str_replace(str_extract(gb,title_pat),title_pat,"\\1")
+  journ= str_replace(str_extract(gb,journ_pat),journ_pat,"\\1")
+  if(is.na(auth)){
+    auth=cons # in case consortium listed but no author
+  }else if(!is.na(cons)){
+    auth=paste(auth,cons,sep=", ") # in case author & consortium listed (never?)
+  }
+  if(i==1){
+    author_ref1=append(author_ref1,auth)
+    title_ref1=append(title_ref1,title)
+    journal_ref1=append(journal_ref1,journ)
+  }else if(i==2){
+    author_ref2=append(author_ref2,auth)
+    title_ref2=append(title_ref2,title)
+    journal_ref2=append(journal_ref2,journ)
+  }else if(i==3){
+    author_ref3=append(author_ref3,auth)
+    title_ref3=append(title_ref3,title)
+    journal_ref3=append(journal_ref3,journ)
+  }
+}
