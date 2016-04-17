@@ -1,4 +1,6 @@
 ###Scrap Paper###
+#old code, test code, debugging code, etc.
+
 
 #popset_fasta_filename = "popset.scinidae.fasta"
 #popset_genbank_filename = "popset.scinidae.gb"
@@ -124,12 +126,12 @@ for(line in genbank){
 genbank_vector
 
 
-[12] "  AUTHORS   Ritchie,H., Jamieson,A.J. and Piertney,S.B."                        
-[13] "  TITLE     Phylogenetic relationships among hadal amphipods of the Superfamily"
-[14] "            Lysianassoidea: Implications for taxonomy and biogeography"         
-[15] "  JOURNAL   Deep Sea Res. Part I Oceanogr. Res. Pap. 105, 119-131 (2015)"       
-[16] "REFERENCE   2  (bases 1 to 569)"                                                
-[17] "  AUTHORS   Ritchie,H., Jamieson,A.J. and Piertney,S.B." 
+# [12] "  AUTHORS   Ritchie,H., Jamieson,A.J. and Piertney,S.B."                        
+# [13] "  TITLE     Phylogenetic relationships among hadal amphipods of the Superfamily"
+# [14] "            Lysianassoidea: Implications for taxonomy and biogeography"         
+# [15] "  JOURNAL   Deep Sea Res. Part I Oceanogr. Res. Pap. 105, 119-131 (2015)"       
+# [16] "REFERENCE   2  (bases 1 to 569)"                                                
+# [17] "  AUTHORS   Ritchie,H., Jamieson,A.J. and Piertney,S.B." 
 
 genbank[12] = "  AUTHORS   refone Ritchie,H., Jamieson,A.J. and Piertney,S.B."
 genbank[17] = "  AUTHORS   reftwo Ritchie,H., Jamieson,A.J. and Piertney,S.B."
@@ -252,4 +254,80 @@ for(thing in voucher){
 }
 count
 
+####
+#     #REFERENCE 1
+#     auth_pat=paste("REFERENCE 1",auth_pattern,sep="")
+#     cons_pat=paste("REFERENCE 1",cons_pattern,sep="")
+#     auth= str_replace(str_extract(gb,auth_pat),auth_pat,"\\1")
+#     cons= str_replace(str_extract(gb,cons_pat),cons_pat,"\\1")
+#     if (is.na(auth)){
+#       auth=cons # in case consortium listed but no author
+#     } else if (!is.na(cons)){
+#       auth=paste(auth,cons,sep=", ") # in case author & consortium listed (never?)
+#     }
+#     author_ref1=append(author_ref1,auth)
+
+#gb=str_replace_all(gb,"(REFERENCE)","@\\1")
+
+
+count=0
+for(thing in author_ref1){
+  if(!is.na(thing)){
+    count=count+1
+  }
+}
+count
+#5143 authors
+#68 consortia
+#5211 (goal) check.
+author_ref1[!is.na(author_ref1)]
+
+International Barcode of Life 67
+NCBI 1
+
+#author and/or consortium for References 1-3 from gb
+#insert an @ after each header in references section
+reference_keys=c("REFERENCE","AUTHORS","CONSRTM","TITLE","JOURNAL","COMMENT","FEATURES")
+for(key in reference_keys){
+  gb=str_replace_all(gb,key,paste("@",key,sep=""))
+}
+
+auth_pattern="[^@]*@AUTHORS ([^@]+) @"
+cons_pattern="[^@]*@CONSRTM ([^@]+) @"
+
+#REFERENCES 1-3
+#change to i in 1:3 later
+for (i in 1:3) {
+  auth_pat=paste("REFERENCE ",auth_pattern,sep=as.character(i))
+  cons_pat=paste("REFERENCE ",cons_pattern,sep=as.character(i))
+  auth= str_replace(str_extract(gb,auth_pat),auth_pat,"\\1")
+  cons= str_replace(str_extract(gb,cons_pat),cons_pat,"\\1")
+  if (is.na(auth)){
+    auth=cons # in case consortium listed but no author
+  } else if (!is.na(cons)){
+    auth=paste(auth,cons,sep=", ") # in case author & consortium listed (never?)
+  }
+  if(i==1){author_ref1=append(author_ref1,auth)}
+  else if(i==2){author_ref2=append(author_ref2,auth)}
+  else if(i==3){author_ref3=append(author_ref3,auth)}
+}
+
+#ref1pattern="REFERENCE 1[^,]*AUTHORS ([^\\d]+) TITLE"
+#changed "AUTHORS" to [AUTHORSCNM]{7} to accommodated AUTHORS or CONSRTM
+#ref1pattern="REFERENCE 1[^,]*[CONSRTM]{7} ([^\\d]+) TITLE"
+#ref1pattern="REFERENCE 1[^,]*[AUTHORSCNM]{7} ([^\\d]+) TITLE"
+
+#ref1pattern="REFERENCE 1[^,]*AUTHORS ([^\\d]+) TITLE"
+#auth= str_replace(str_extract(gb,ref1pattern),ref1pattern,"\\1")
+#consrtm1pattern="REFERENCE 1[^,]*CONSRTM ([^\\d]+) TITLE"
+#cons= str_replace(str_extract(gb,consrtm1pattern),consrtm1pattern,"\\1")
+#if (is.na(auth)){
+#  auth=cons
+#} else if (!is.na(cons)){
+#  auth=paste(auth,cons,sep=", ")
+#}
+#author=append(author,auth)
+#ref2pattern="REFERENCE 2[^,]*AUTHORS ([^\\d]+) TITLE"
+#auth2= str_replace(str_extract(gb,ref2pattern),ref2pattern,"\\1")
+#author_ref2=append(author_ref2,auth2)
 
