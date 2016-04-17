@@ -13,6 +13,14 @@
 #genes of interest
 #genes=c("histone 3","18S","28S","COI","RpS5","RpS2","ArgKin","EF-1a","GAPDH","IDH","MDH","CAD","wingless","Unknown sequence")
 
+#print(genbank_vector)
+
+#create gene lookup table
+# genelookup= data.frame(
+#   rawlist=c("histone 3","18S","small subunit ribosomal","28S","cytochrome c oxidase subunit I ","cytochrome oxidase subunit I ","coi","CO1","COI","COX1","cox1","RpS5","RpS2","ArgKin","EF1a","EF-1a","GAPDH","IDH","MDH","CAD","wingless","Unknown sequence","16S","COX2","COX3","ATP6","cytochrome b"),
+#   genelist=c("H3","18S","18S","28S","COI","COI","COI","COI","COI","COI","COI","RpS5","RpS2","ArgKin","EF1a","EF1a","GAPDH","IDH","MDH","CAD","Wgl","Unknown","16S","COX2","COX3","ATP6","CytB")
+# )
+
 #     for (i in seq(length(genelookup$rawlist))){
 #       if (str_detect(des,genelookup$rawlist[i])){
 #         gen = paste(gen,genelookup$genelist[i],sep=" ")
