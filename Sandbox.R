@@ -374,3 +374,119 @@ for (i in 1:3) {
     journal_ref3=append(journal_ref3,journ)
   }
 }
+
+##Build Gene Table
+
+```{r}
+df_sort=df[order(organism),]
+
+gene_table=df_sort[,c(2:5,7,8)]
+
+#initialize gene vectors:
+mt_Genome=
+  mt_COI=
+  n_H3=
+  mt_12S=
+  mt_16S=
+  n_18S=
+  n_28S=
+  n_RpS5=
+  n_RpS2=
+  ArgKin=
+  EF1a=
+  GAPDH=
+  ID=
+  MDH=
+  CAD=
+  Wgl=
+  mt_COX2=
+  mt_COX3=
+  mt_ATP6=
+  mt_CytB=
+  HSP70=
+  n_ITS2=rep("",nrow(df_sort))
+
+for(i in seq(nrow(df_sort))){
+  entry=as.character(df_sort$gene[i])
+  if(str_detect(entry,"mt Genome")){
+    mt_Genome[i]=as.character(df_sort$accession[i])
+    mt_COI[i]=mt_12S[i]=mt_16S[i]=mt_COX2[i]=mt_COX3[i]=mt_ATP6[i]=mt_CytB[i]="mt Genome"
+  }
+  if(str_detect(entry,"COI")){mt_COI[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"H3")){n_H3[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"12S")){mt_12S[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"16S")){mt_16S[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"18S")){n_18S[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"28S")){n_28S[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"RpS5")){n_RpS5[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"RpS2")){n_RpS2[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"ArgKin")){ArgKin[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"EF1a")){EF1a[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"GAPDH")){GAPDH[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"ID")){ID[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"MDH")){MDH[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"CAD")){CAD[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"Wgl")){Wgl[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"COX2")){mt_COX2[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"COX3")){mt_COX3[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"ATP6")){mt_ATP6[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"CytB")){mt_CytB[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"HSP70")){HSP70[i]=as.character(df_sort$accession[i])}
+  if(str_detect(entry,"ITS2")){n_ITS2[i]=as.character(df_sort$accession[i])}
+}
+
+gene_table=df_sort[,c(2:5)]
+
+gene_table=data.frame(gene_table,mt_Genome,mt_COI,n_H3,mt_12S,mt_16S,n_18S,n_28S,n_RpS5,n_RpS2,ArgKin,EF1a,GAPDH,ID,MDH,CAD,Wgl,mt_COX2,mt_COX3,mt_ATP6,mt_CytB,HSP70,n_ITS2,stringsAsFactors=FALSE)
+
+str(gene_table)
+
+gt=aggregate.data.frame(gene_table, by=list(gene_table$voucher), max)
+
+
+aggregate(x=DF[c("v1","v2","v3","v4")], by=list(name=DF$name), min, na.rm = TRUE)
+
+COI=vector(NA, length=nrow(df_sort))
+vector()
+
+
+
+
+for(entry in df_sort$gene){
+  if str_detect(entry,COI)
+}
+
+#vector of gene names:
+genes=c()
+gene=""
+for(entry in genelookup$genelist){
+  if(entry!=gene){
+    gene=entry
+    genes=append(genes,gene)
+  }
+}
+
+
+
+
+#initialize gene table
+gene_table=data.frame(matrix(NA, nrow=nrow(df_sort), ncol=28))
+colnames(gene_table)=c("ORGANISM","TAXON_ID","VOUCHER","ISOLATE",genes)
+
+
+
+
+
+i=1
+gene_table$ORGANISM[i]=
+  df_sort$organism[i]
+
+for(i in seq(nrow(df_sort))){
+  for(entry in )
+}
+
+for(i in seq(nrow(df_sort))){
+  if(i==1){
+  }
+}
+```
