@@ -234,6 +234,12 @@ for(thing in isolate){
 }
 count
 
+#isolate number from gb
+#iso_pattern="/isolate=\"([\\w ./-]+)\""
+iso_pattern="/isolate=\"([^\"]+)\""
+iso=str_replace(str_extract(gb,iso_pattern),iso_pattern,"\\1")
+isolate=append(isolate,iso)
+
 #voucher number from gb
 #vou_pattern="voucher="\"([^\"]+)\""
 #vou=str_replace(str_extract(gb,vou_pattern),vou_pattern,"\\1")

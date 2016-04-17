@@ -107,16 +107,33 @@ others=c()
 seq=""
 record=0
 for (line in fasta) {
+  # if a header is detected:
   if (str_detect(line,fixed(">"))){
-    # if a header is detected:
+    
+    #if sequence was recorded for previous record, add it to the sequence vector
+    if (nchar(seq)>0) sequence=append(sequence,seq)
+    seq="" #reset seq
+    
     record=record+1 #track record number
+    
+    #store fasta header
     fasta_header = append(fasta_header,line)
+    
+    #parse fasta header
     header_split=strsplit(line, "|", fixed=TRUE)
+    
+    #accession from fasta
     accession=append(accession,header_split[[1]][4])
+    
+    #description from fasta
     des=str_trim(header_split[[1]][5], side="left")
     description=append(description,des)
+    
+    #organism from fasta
     #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
     organism=append(organism,str_extract(des,"[A-Z][a-z]+ [cfa. ]{0,5}[a-z.]+"))
+    
+    #gene from fasta
     ingenes=FALSE
     gen=""
     for(i in seq(length(genelookup$rawlist))){
@@ -132,7 +149,7 @@ for (line in fasta) {
     }
     gene=append(gene,gen)
     
-    #data from genbank file:
+    #parse data from genbank file:
     gb=genbank_vector[record]
     
     #voucher number from gb
@@ -141,7 +158,6 @@ for (line in fasta) {
     voucher=append(voucher,vou)
     
     #isolate number from gb
-    #iso_pattern="/isolate=\"([\\w ./-]+)\""
     iso_pattern="/isolate=\"([^\"]+)\""
     iso=str_replace(str_extract(gb,iso_pattern),iso_pattern,"\\1")
     isolate=append(isolate,iso)
@@ -179,9 +195,6 @@ for (line in fasta) {
     else if(i==3){author_ref3=append(author_ref3,auth)}
     }
     
-    #if sequence was recorded for previous record, add it to the sequence vector
-    if (nchar(seq)>0) sequence=append(sequence,seq)
-    seq="" #reset seq
   } else {
     # if the line is not a header, add the line to seq
     seq=paste(seq,line,sep="")
