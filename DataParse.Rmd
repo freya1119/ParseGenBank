@@ -89,23 +89,30 @@ genelookup= data.frame(
 #initiate vectors
 fasta_header=c()
 sequence=c()
+
+species_name=c()
+organism=c()
 accession=c()
 description=c()
-organism=c()
+
 voucher=c()
 isolate=c()
 gene=c()
 bp_length=c()
 taxon_id=c()
+
 author_ref1=c()
 title_ref1=c()
 journal_ref1=c()
+
 author_ref2=c()
 title_ref2=c()
 journal_ref2=c()
+
 author_ref3=c()
 title_ref3=c()
 journal_ref3=c()
+
 others=c()
 
 #parse fasta (& genbank) data
@@ -134,9 +141,9 @@ for (line in fasta) {
     des=str_trim(header_split[[1]][5], side="left")
     description=append(description,des)
     
-    #organism from fasta
+    #species name from fasta
     #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
-    organism=append(organism,str_extract(des,"[A-Z][a-z]+ [cfa. ]{0,5}[a-z.]+"))
+    species_name=append(species_name,str_extract(des,"[A-Z][a-z]+ [cfa. ]{0,5}[a-z.]+"))
     
     #gene from fasta
     ingenes=FALSE
@@ -156,6 +163,11 @@ for (line in fasta) {
     
     #parse data from genbank file:
     gb=genbank_vector[record]
+    
+    #organism from gb
+    org_pattern="organism=\"([^\"]+)\""
+    org=str_replace(str_extract(gb,org_pattern),org_pattern,"\\1")
+    organism=append(organism,org)
     
     #voucher number from gb
     vou_pattern="voucher=\"([^\"]+)\""
@@ -218,8 +230,7 @@ for (line in fasta) {
 }
 sequence=append(sequence,seq)
 
-
-df=data.frame(organism,taxon_id,voucher,isolate,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence)
+df=data.frame(species_name,organism,taxon_id,voucher,isolate,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence)
 
 print(others)
 
