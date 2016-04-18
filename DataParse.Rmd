@@ -279,9 +279,9 @@ for(i in seq(nrow(df))){
   if(str_detect(entry,"ITS2")){n_ITS2[i]=as.character(df$accession[i])}
 }
 
-gene_table=df[,c(2:5)]
+gene_table=df[,c(2:4)]
 
-gene_table=data.frame(gene_table,mt_Genome,mt_COI,n_H3,mt_12S,mt_16S,n_18S,n_28S,n_RpS5,n_RpS2,ArgKin,EF1a,GAPDH,ID,MDH,CAD,Wgl,mt_COX2,mt_COX3,mt_ATP6,mt_CytB,HSP70,n_ITS2,stringsAsFactors=FALSE)
+gene_table=data.frame(gene_table,mt_Genome,mt_COI,n_18S,n_28S,n_H3,mt_12S,mt_16S,n_RpS5,n_RpS2,ArgKin,EF1a,GAPDH,ID,MDH,CAD,Wgl,mt_COX2,mt_COX3,mt_ATP6,mt_CytB,HSP70,n_ITS2,stringsAsFactors=FALSE)
 
 #aggregate rows where voucher # matches (omits rows where voucher is NA)
 gt=aggregate(gene_table, by=list(gene_table$voucher), max)
@@ -291,4 +291,16 @@ gt=gt[,c(2:ncol(gt))]
 
 #replace rows where voucher is NA
 gt=rbind(gt,gene_table[is.na(voucher),])
+```
+
+##Output Data
+
+```{r}
+#parsed data table
+df_filename=paste(QUERY,DATABASE,"alldata.txt",sep=".")
+write.table(df, df_filename, sep="\t",row.names=FALSE)
+#gene table
+gt_filename=paste(QUERY,DATABASE,"genetable.txt",sep=".")
+write.table(gt, gt_filename, sep="\t",row.names=FALSE)
+
 ```
