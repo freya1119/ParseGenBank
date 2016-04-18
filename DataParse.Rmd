@@ -33,14 +33,19 @@ At UNIX command line enter:
 #QUERY=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
 #QUERY=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
 ##QUERY=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
+
+##subgroups of Senticaudata:
 #QUERY=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
 #QUERY=Corophiida; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Gammarida; DATABASE=nucleotide; FORMAT=fasta
+##QUERY=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
+#QUERY=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
 
-QUERY=Hadziida; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Talitrida; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+#QUERY=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
+#QUERY=unclassified Senticaudata
 
+###subgroups of Gammarida:
+QUERY=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#QUERY=Gammaridira; DATABASE=nucleotide; FORMAT=fasta
 
 FILENAME=$DATABASE.$QUERY.$FORMAT
 esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
@@ -65,10 +70,12 @@ esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 #QUERY="Ingolfiellidea"
 ##QUERY="Senticaudata" #not downloaded - too large?
 #QUERY="Bogidiellida"
+#QUERY="Corophiida"
 
-QUERY="Corophiida"
+##QUERY="Gammarida" #error subgroups:
+QUERY="Crangonyctidira"
 
-#QUERY="Gammarida"
+
 #QUERY="Hadziida"
 #QUERY="Talitrida"
 
@@ -102,8 +109,8 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","GAPDH","IDH","MDH","CAD","wingless","COX2","COX3","ATP6","cytochrome b","HSP70","mitochondri[onal DNA]{2,6}, complete genome","internal transcribed spacer 2","transposon","Unknown sequence","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","superoxide dismutase gene","hemocyanin","CsDll"),
-  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","ATP6","CytB","HSP70","mt Genome","ITS2","transposon","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","MnSOD","hemocyanin","CsDll")
+  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","GAPDH","IDH","MDH","CAD","wingless","COX2","COX3","ATP6","cytochrome b","HSP70","mitochondri[onal DNA]{2,6}, complete genome","internal transcribed spacer 2","transposon","Unknown sequence","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","superoxide dismutase gene","hemocyanin","CsDll","contig_\\d+_\\d+ transcribed RNA"),
+  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","ATP6","CytB","HSP70","mt Genome","ITS2","transposon","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","MnSOD","hemocyanin","CsDll","RNAseq contig")
 )
 
 #initiate vectors
@@ -144,7 +151,7 @@ for (line in fasta) {
   if (str_detect(line,fixed(">"))){
     
     #if sequence was recorded for previous record, add it to the sequence vector
-    if (nchar(seq)>0) sequence=append(sequence,seq)
+    if (nchar(seq)>0){sequence=append(sequence,seq)}
     seq="" #reset seq
     
     record=record+1 #track record number
@@ -334,6 +341,10 @@ KP316286 KP316285 KP316276 KP316274 KP316272 ...
 
 Check "small subunit ribosomal"
 #currently recorded as 18S nuclear
+
+Lots of RNAseq contigs listed for QUERY="Gammarida"
+"contig_\\d+_\\d+ transcribed RNA"
+#currently recorded as RNAseq contig
 
 ToDo:
 1. Add gene lookup table genes to gene table
