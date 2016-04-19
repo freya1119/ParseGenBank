@@ -47,7 +47,6 @@ At UNIX command line enter:
 #TAXA=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #done no errors
 ##TAXA=Gammaridira; DATABASE=nucleotide; FORMAT=fasta #very large
 ###subgroups of Gammaridira:
-
 #TAXA=Acanthogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
 #TAXA=Anisogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
 #TAXA=Baikalogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
@@ -56,6 +55,35 @@ At UNIX command line enter:
 #TAXA=Gammarellidae; DATABASE=nucleotide; FORMAT=fasta #downloaded
 
 #TAXA=Gammaridae; DATABASE=nucleotide; FORMAT=fasta #errors - find subsets
+###subgroups of Gammaridae:
+Barnardiorum
+Chaetogammarus
+Comatogammarus
+Corophiomorphus
+Dikerogammarus
+Echinogammarus
+Euxinia
+Fontogammarus
+Gammaracanthus
+
+
+TAXA=Gammarus; DATABASE=nucleotide; FORMAT=fasta #downloaded
+
+Gmelina
+Hurleya
+Jugogammarus
+Laurogammarus
+Marinogammarus
+Neogammarus
+Obesogammarus
+Paroediceros
+Rhipidogammarus
+Sarothrogammarus
+Sinogammarus
+Tryphosella
+unclassified Gammaridae
+environmental samples
+
 
 #TAXA=Luciobliviidae; DATABASE=nucleotide; FORMAT=fasta #okay 3
 #TAXA=Macrohectopidae; DATABASE=nucleotide; FORMAT=fasta #okay 19
@@ -66,7 +94,9 @@ At UNIX command line enter:
 #TAXA=Pontogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
 #TAXA=Typhlogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
 
-QUERY=$TAXA[ORGN]
+QUERY=$TAXA[ORGN] NOT Environmental samples[ORGN]
+#NOT Environmental samples eliminates 20 sequences in Amphipoda
+
 FILENAME=$DATABASE.$TAXA.$FORMAT
 esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 
