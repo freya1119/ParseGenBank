@@ -2,6 +2,7 @@
 #old code, test code, debugging code, etc.
 
 
+
 #popset_fasta_filename = "popset.scinidae.fasta"
 #popset_genbank_filename = "popset.scinidae.gb"
 
@@ -11,6 +12,76 @@
 #read data into R
 #popset_fasta<-readLines(popset_fasta_filename)
 #popset_genbank<-readLines(popset_genbank_filename)
+
+At UNIX command line enter:
+  ```{bash, eval=FALSE}
+# specify options for fasta files:
+#QUERY=scinidae; DATABASE=popset; FORMAT=fasta
+#QUERY=hyperia; DATABASE=nucleotide; FORMAT=fasta
+
+#QUERY=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+#QUERY=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
+#QUERY=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
+##QUERY=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
+
+##subgroups of Senticaudata:
+#QUERY=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
+#QUERY=Corophiida; DATABASE=nucleotide; FORMAT=fasta
+##QUERY=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
+#QUERY=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
+
+#QUERY=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
+#QUERY=unclassified Senticaudata
+
+###subgroups of Gammarida:
+#QUERY=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #done no errors
+##QUERY=Gammaridira; DATABASE=nucleotide; FORMAT=fasta #very large
+###subgroups of Gammaridira:
+#Acanthogammaridae
+#Anisogammaridae
+#Baikalogammaridae
+#Eoniphargidae
+#Eulimnogammaridae
+#Gammarellidae
+#Gammaridae
+#Luciobliviidae
+#Macrohectopidae
+#Mesogammaridae
+#Micruropodidae
+#Pachyschesidae
+#Pallaseidae
+#Pontogammaridae
+#Pontogammaridae[Primary Organism]
+QUERY="ORGN Pontogammaridae[Primary Organism]"; DATABASE=nucleotide; FORMAT=fasta
+#Typhlogammaridae
+
+#QUERY="scinidae"
+#QUERY="hyperia"
+
+#QUERY="Hyperiidea"
+#QUERY="Gammaridea"
+#QUERY="Ingolfiellidea"
+##QUERY="Senticaudata" #not downloaded - too large?
+#QUERY="Bogidiellida"
+#QUERY="Corophiida"
+
+##QUERY="Gammarida" #error subgroups:
+QUERY="Crangonyctidira"
+
+
+#QUERY="Hadziida"
+#QUERY="Talitrida"
+
+#DATABASE="popset"
+DATABASE="nucleotide"
+
+fasta_filename=paste(DATABASE,QUERY,"fasta",sep=".")
+genbank_filename=paste(DATABASE,QUERY,"gb",sep=".")
+
+#read data into R
+fasta=readLines(fasta_filename)
+genbank=readLines(genbank_filename)
+```
 
 #genes of interest
 #genes=c("histone 3","18S","28S","COI","RpS5","RpS2","ArgKin","EF-1a","GAPDH","IDH","MDH","CAD","wingless","Unknown sequence")

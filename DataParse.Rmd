@@ -26,34 +26,53 @@ export PATH=$PATH:$HOME/edirect
 At UNIX command line enter:
 ```{bash, eval=FALSE}
 # specify options for fasta files:
-#QUERY=scinidae; DATABASE=popset; FORMAT=fasta
-#QUERY=hyperia; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=scinidae; DATABASE=popset; FORMAT=fasta
+#TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
 
-#QUERY=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
-##QUERY=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
+#TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
+##TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
 
 ##subgroups of Senticaudata:
-#QUERY=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
-#QUERY=Corophiida; DATABASE=nucleotide; FORMAT=fasta
-##QUERY=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
-#QUERY=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
+#TAXA=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Corophiida; DATABASE=nucleotide; FORMAT=fasta
+##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
+#TAXA=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
 
-#QUERY=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
-#QUERY=unclassified Senticaudata
+#TAXA=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
+#TAXA=unclassified Senticaudata
 
 ###subgroups of Gammarida:
-QUERY=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#QUERY=Gammaridira; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #done no errors
+##TAXA=Gammaridira; DATABASE=nucleotide; FORMAT=fasta #very large
+###subgroups of Gammaridira:
+#Acanthogammaridae
+#Anisogammaridae
+#Baikalogammaridae
+#Eoniphargidae
+#Eulimnogammaridae
+#Gammarellidae
+#Gammaridae
+#Luciobliviidae
+#Macrohectopidae
+#Mesogammaridae
+#Micruropodidae
+#Pachyschesidae
+#Pallaseidae
+#Pontogammaridae
+TAXA=Pontogammaridae; DATABASE=nucleotide; FORMAT=fasta
+#Typhlogammaridae
 
-FILENAME=$DATABASE.$QUERY.$FORMAT
+
+QUERY=$TAXA[ORGN]
+FILENAME=$DATABASE.$TAXA.$FORMAT
 esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 
 #options to change for genbank files:
 FORMAT=gb
 
-FILENAME=$DATABASE.$QUERY.$FORMAT
+FILENAME=$DATABASE.$TAXA.$FORMAT
 esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 
 ```
@@ -62,28 +81,28 @@ esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 
 ```{r}
 #specify options used above for EDirect:
-#QUERY="scinidae"
-#QUERY="hyperia"
+#TAXA="scinidae"
+#TAXA="hyperia"
 
-#QUERY="Hyperiidea"
-#QUERY="Gammaridea"
-#QUERY="Ingolfiellidea"
-##QUERY="Senticaudata" #not downloaded - too large?
-#QUERY="Bogidiellida"
-#QUERY="Corophiida"
+#TAXA="Hyperiidea"
+#TAXA="Gammaridea"
+#TAXA="Ingolfiellidea"
+##TAXA="Senticaudata" #not downloaded - too large?
+#TAXA="Bogidiellida"
+#TAXA="Corophiida"
 
-##QUERY="Gammarida" #error subgroups:
-QUERY="Crangonyctidira"
+##TAXA="Gammarida" #error subgroups:
+TAXA="Crangonyctidira"
 
 
-#QUERY="Hadziida"
-#QUERY="Talitrida"
+#TAXA="Hadziida"
+#TAXA="Talitrida"
 
 #DATABASE="popset"
 DATABASE="nucleotide"
 
-fasta_filename=paste(DATABASE,QUERY,"fasta",sep=".")
-genbank_filename=paste(DATABASE,QUERY,"gb",sep=".")
+fasta_filename=paste(DATABASE,TAXA,"fasta",sep=".")
+genbank_filename=paste(DATABASE,TAXA,"gb",sep=".")
 
 #read data into R
 fasta=readLines(fasta_filename)
@@ -109,8 +128,8 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","GAPDH","IDH","MDH","CAD","wingless","COX2","COX3","ATP6","cytochrome b","HSP70","mitochondri[onal DNA]{2,6}, complete genome","internal transcribed spacer 2","transposon","Unknown sequence","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","superoxide dismutase gene","hemocyanin","CsDll","contig_\\d+_\\d+ transcribed RNA"),
-  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","ATP6","CytB","HSP70","mt Genome","ITS2","transposon","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","MnSOD","hemocyanin","CsDll","RNAseq contig")
+  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","GAPDH","IDH","MDH","CAD","wingless","COX2","COX3","ATP6","cytochrome b","HSP70","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","superoxide dismutase gene","hemocyanin","CsDll","contig_\\d+_\\d+ transcribed RNA","microsatellite"),
+  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","ATP6","CytB","HSP70","mt Genome","mt Genome","partial mt Genome","ITS2","ITS1","transposon","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","MnSOD","hemocyanin","CsDll","RNAseq contig","microsat")
 )
 
 #initiate vectors
