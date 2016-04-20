@@ -1,6 +1,73 @@
 ###Scrap Paper###
 #old code, test code, debugging code, etc.
 
+# specify options for fasta files:
+#TAXA=scinidae; DATABASE=popset; FORMAT=fasta
+#TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
+
+#TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
+##TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
+
+##subgroups of Senticaudata:
+#TAXA=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
+#TAXA=Corophiida; DATABASE=nucleotide; FORMAT=fasta
+##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
+#TAXA=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
+
+#TAXA=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
+#TAXA=unclassified Senticaudata
+
+###subgroups of Gammarida:
+#TAXA=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #done no errors
+##TAXA=Gammaridira; DATABASE=nucleotide; FORMAT=fasta #very large
+###subgroups of Gammaridira:
+#TAXA=Acanthogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#TAXA=Anisogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#TAXA=Baikalogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#TAXA=Eoniphargidae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#TAXA=Eulimnogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+#TAXA=Gammarellidae; DATABASE=nucleotide; FORMAT=fasta #downloaded
+
+#TAXA=Gammaridae; DATABASE=nucleotide; FORMAT=fasta #errors - find subsets
+###subgroups of Gammaridae:
+Barnardiorum
+Chaetogammarus
+Comatogammarus
+Corophiomorphus
+Dikerogammarus
+Echinogammarus
+Euxinia
+Fontogammarus
+Gammaracanthus
+#TAXA=Gammarus; DATABASE=nucleotide; FORMAT=fasta #downloaded 4423 #error fixed - works now.
+Gmelina
+Hurleya
+Jugogammarus
+Laurogammarus
+Marinogammarus
+Neogammarus
+Obesogammarus
+Paroediceros
+Rhipidogammarus
+Sarothrogammarus
+Sinogammarus
+Tryphosella
+unclassified Gammaridae
+environmental samples
+
+
+
+#TAXA=Luciobliviidae; DATABASE=nucleotide; FORMAT=fasta #okay 3
+#TAXA=Macrohectopidae; DATABASE=nucleotide; FORMAT=fasta #okay 19
+#TAXA=Mesogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay 3 entries
+#TAXA=Micruropodidae; DATABASE=nucleotide; FORMAT=fasta #okay 144 entries
+#TAXA=Pachyschesidae; DATABASE=nucleotide; FORMAT=fasta #okay 1 entry
+#TAXA=Pallaseidae; DATABASE=nucleotide; FORMAT=fasta #okay
+#TAXA=Pontogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
+#TAXA=Typhlogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
+
 
 
 #popset_fasta_filename = "popset.scinidae.fasta"

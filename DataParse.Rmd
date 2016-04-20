@@ -29,70 +29,19 @@ At UNIX command line enter:
 #TAXA=scinidae; DATABASE=popset; FORMAT=fasta
 #TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
 
-#TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
 #TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
 #TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
-##TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
+
+#TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
 
 ##subgroups of Senticaudata:
 #TAXA=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
 #TAXA=Corophiida; DATABASE=nucleotide; FORMAT=fasta
-##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #causes errors #subgroup to find
+##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #error fixed, okay now
 #TAXA=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
-
 #TAXA=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
 #TAXA=unclassified Senticaudata
-
-###subgroups of Gammarida:
-#TAXA=Crangonyctidira; DATABASE=nucleotide; FORMAT=fasta #done no errors
-##TAXA=Gammaridira; DATABASE=nucleotide; FORMAT=fasta #very large
-###subgroups of Gammaridira:
-#TAXA=Acanthogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#TAXA=Anisogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#TAXA=Baikalogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#TAXA=Eoniphargidae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#TAXA=Eulimnogammaridae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-#TAXA=Gammarellidae; DATABASE=nucleotide; FORMAT=fasta #downloaded
-
-#TAXA=Gammaridae; DATABASE=nucleotide; FORMAT=fasta #errors - find subsets
-###subgroups of Gammaridae:
-Barnardiorum
-Chaetogammarus
-Comatogammarus
-Corophiomorphus
-Dikerogammarus
-Echinogammarus
-Euxinia
-Fontogammarus
-Gammaracanthus
-Gammarus (see below)
-Gmelina
-Hurleya
-Jugogammarus
-Laurogammarus
-Marinogammarus
-Neogammarus
-Obesogammarus
-Paroediceros
-Rhipidogammarus
-Sarothrogammarus
-Sinogammarus
-Tryphosella
-unclassified Gammaridae
-environmental samples
-#TAXA=Gammarus; DATABASE=nucleotide; FORMAT=fasta #downloaded 4423 #error
-###Subgroups of Gammarus?
-
-
-
-#TAXA=Luciobliviidae; DATABASE=nucleotide; FORMAT=fasta #okay 3
-#TAXA=Macrohectopidae; DATABASE=nucleotide; FORMAT=fasta #okay 19
-#TAXA=Mesogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay 3 entries
-#TAXA=Micruropodidae; DATABASE=nucleotide; FORMAT=fasta #okay 144 entries
-#TAXA=Pachyschesidae; DATABASE=nucleotide; FORMAT=fasta #okay 1 entry
-#TAXA=Pallaseidae; DATABASE=nucleotide; FORMAT=fasta #okay
-#TAXA=Pontogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
-#TAXA=Typhlogammaridae; DATABASE=nucleotide; FORMAT=fasta #okay
 
 QUERY=$TAXA[ORGN] NOT Environmental samples[ORGN]
 #NOT Environmental samples eliminates 20 sequences in Amphipoda
@@ -125,7 +74,7 @@ echo $TAXA.downloaded!
 #TAXA="Bogidiellida"
 #TAXA="Corophiida"
 
-##TAXA="Gammarida" #error subgroups:
+TAXA="Gammarida" #error subgroups:
 #TAXA="Crangonyctidira"
 #TAXA="Pontogammaridae"
 #TAXA="Typhlogammaridae"
@@ -136,7 +85,7 @@ echo $TAXA.downloaded!
 #TAXA="Macrohectopidae"
 #TAXA="Luciobliviidae"
 #TAXA="Gammaridae"
-TAXA="Gammarus"
+#TAXA="Gammarus"
 
 
 #TAXA="Hadziida"
@@ -172,8 +121,8 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","S18","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","COX2","COX3","COIII","ATP6","cytochrome b","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)"),
-  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","COX3","ATP6","CytB","hsp70","hsp70-2","hsp70-1","mt Genome","mt Genome","partial mt Genome","ITS2","ITS1","transposon","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","ACT","Abcb1","MnSOD","hemocyanin","ND5","ND2","CsDll","RNAseq contig","microsat","Rh")
+  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","S18","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","COX2","COX3","COIII","ATP6","cytochrome b","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","unknown mRNA","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)","myosin heavy chain","whole genome shotgun","transcriptome shotgun"),
+  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","COX3","ATP6","CytB","hsp70","hsp70-2","hsp70-1","mt Genome","mt Genome","partial mt Genome","ITS2","ITS1","transposon","Unknown","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","ACT","Abcb1","MnSOD","hemocyanin","ND5","ND2","CsDll","RNAseq contig","microsat","Rh","MHC","whole genome shotgun","transcriptome shotgun")
 )
 
 #initiate vectors
@@ -330,7 +279,7 @@ sequence=append(sequence,seq)
 
 df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
-#print(others)
+print(others)
 
 ```
 
@@ -369,7 +318,7 @@ for(i in seq(nrow(df))){
   if(str_detect(entry,"ITS2")){n_ITS2[i]=as.character(df$accession[i])}
 }
 
-gene_table=df[,c(2:4)]
+gene_table=df[,c(2:4,10)]
 
 gene_table=data.frame(gene_table,mt_Genome,mt_COI,n_18S,n_28S,n_H3,mt_12S,mt_16S,n_RpS5,n_RpS2,ArgKin,EF1a,GAPDH,ID,MDH,CAD,Wgl,mt_COX2,mt_COX3,mt_ATP6,mt_CytB,HSP70,n_ITS2,stringsAsFactors=FALSE)
 
