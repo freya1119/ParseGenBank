@@ -135,6 +135,18 @@ QUERY="ORGN Pontogammaridae[Primary Organism]"; DATABASE=nucleotide; FORMAT=fast
 ##QUERY="Gammarida" #error subgroups:
 QUERY="Crangonyctidira"
 
+TAXA="Gammarida"
+#TAXA="Crangonyctidira"
+#TAXA="Pontogammaridae"
+#TAXA="Typhlogammaridae"
+#TAXA="Pallaseidae"
+#TAXA="Pachyschesidae"
+#TAXA="Micruropodidae"
+#TAXA="Mesogammaridae"
+#TAXA="Macrohectopidae"
+#TAXA="Luciobliviidae"
+#TAXA="Gammaridae"
+#TAXA="Gammarus"
 
 #QUERY="Hadziida"
 #QUERY="Talitrida"
@@ -647,3 +659,11 @@ for(i in seq(nrow(df_sort))){
   }
 }
 ```
+
+
+genelookup= data.frame(
+  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","histone H{0,1}3","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","S18","small subunit ribosomal","28S","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","COX2","COX3","COIII","ATP6","cytochrome b","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","unknown mRNA","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)","myosin heavy chain","whole genome shotgun","transcriptome shotgun"),
+  genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","COX3","ATP6","CytB","hsp70","hsp70-2","hsp70-1","mt Genome","mt Genome","partial mt Genome","ITS2","ITS1","transposon","Unknown","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","ACT","Abcb1","MnSOD","hemocyanin","ND5","ND2","CsDll","RNAseq contig","microsat","Rh","MHC","whole genome shotgun","transcriptome shotgun")
+)
+
+
