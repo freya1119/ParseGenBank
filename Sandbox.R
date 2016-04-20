@@ -109,7 +109,26 @@ genbank=readLines(genbank_filename)
 
 genes=c("histone 3","18S","28S","COI","RpS5","RpS2","ArgKin","EF-1a","GAPDH","IDH","MDH","CAD","wingless","Unknown sequence")
 
+###
 
+For Gammarus data:
+  sequence vector is 1 sequence short
+due to FJVI00000000.1 which does not have a sequence listed:
+  >gi|1019572867|emb|FJVI00000000.1|FJVI01000000 Gammarus pulex, whole genome shotgun sequencing project
+Issue caused by using (nchar(seq)>0) to determine if a sequence was recorded and needed to be added to the sequence vector. This was changed to add a sequence to the sequence vector as long as the loop is beyond the first line of the fasta
+
+for (i in seq(length(fasta))) {
+  line = fasta[i]
+  #for (line in fasta) {
+  # if a header is detected:
+  if (str_detect(line,fixed(">"))){
+    
+    #if sequence was recorded for previous record, add it to the sequence vector
+    if (i>1) {sequence=append(sequence,seq)}
+    #    if (nchar(seq)>0){sequence=append(sequence,seq)}
+    seq="" #reset seq
+    
+####
 
 for(gene_name in genes){
   if(str_detect(des,gene_name)){

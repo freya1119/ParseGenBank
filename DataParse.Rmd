@@ -65,10 +65,7 @@ Echinogammarus
 Euxinia
 Fontogammarus
 Gammaracanthus
-
-
-TAXA=Gammarus; DATABASE=nucleotide; FORMAT=fasta #downloaded
-
+Gammarus (see below)
 Gmelina
 Hurleya
 Jugogammarus
@@ -83,6 +80,9 @@ Sinogammarus
 Tryphosella
 unclassified Gammaridae
 environmental samples
+#TAXA=Gammarus; DATABASE=nucleotide; FORMAT=fasta #downloaded 4423 #error
+###Subgroups of Gammarus?
+
 
 
 #TAXA=Luciobliviidae; DATABASE=nucleotide; FORMAT=fasta #okay 3
@@ -135,7 +135,8 @@ echo $TAXA.downloaded!
 #TAXA="Mesogammaridae"
 #TAXA="Macrohectopidae"
 #TAXA="Luciobliviidae"
-TAXA="Gammaridae"
+#TAXA="Gammaridae"
+TAXA="Gammarus"
 
 
 #TAXA="Hadziida"
@@ -208,12 +209,12 @@ others=c()
 #parse fasta (& genbank) data
 seq=""
 record=0
-for (line in fasta) {
+for (i in seq(length(fasta))) {
+  line = fasta[i]
   # if a header is detected:
   if (str_detect(line,fixed(">"))){
-    
     #if sequence was recorded for previous record, add it to the sequence vector
-    if (nchar(seq)>0){sequence=append(sequence,seq)}
+    if (i>1) {sequence=append(sequence,seq)}
     seq="" #reset seq
     
     record=record+1 #track record number
@@ -329,7 +330,7 @@ sequence=append(sequence,seq)
 
 df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
-print(others)
+#print(others)
 
 ```
 
