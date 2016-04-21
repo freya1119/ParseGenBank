@@ -666,4 +666,78 @@ genelookup= data.frame(
   genelist=c("COI","COI","H3","12S","16S","16S","18S","18S","18S","28S","RpS5","RpS2","ArgKin","EF1a","EF1a","GAPDH","IDH","MDH","CAD","Wgl","COX2","COX3","COX3","ATP6","CytB","hsp70","hsp70-2","hsp70-1","mt Genome","mt Genome","partial mt Genome","ITS2","ITS1","transposon","Unknown","Unknown","anonymous locus","NAK-ATPase","NAK-ATPase","PTGS","PTGS","GH7D","GH7A","ACT","Abcb1","MnSOD","hemocyanin","ND5","ND2","CsDll","RNAseq contig","microsat","Rh","MHC","whole genome shotgun","transcriptome shotgun")
 )
 
+##Build Gene Table
 
+```{r, eval=FALSE, tidy=TRUE}
+
+
+genelist=(unique(as.character(genelookup$genelist)))
+
+(#initialize gene vectors:
+#for(gene in genelist) {assign(gene,rep("",nrow(df)))}
+for(gene in genelist) {assign(gene,c())}
+
+#initialize gene vectors:
+#mt_Genome=mt_COI=n_H3=mt_12S=mt_16S=n_18S=n_28S=n_RpS5=n_RpS2=ArgKin=EF1a=GAPDH=ID=MDH=CAD=Wgl=mt_COX2=mt_COX3=mt_ATP6=mt_CytB=HSP70=n_ITS2=rep("",nrow(df))
+
+g=""
+for(i in seq(nrow(df))){
+  entry=as.character(df$gene[i])
+  for(gene in genelist){
+    if(str_detect(entry,gene)){g=df$accession[i]}
+    assign(gene,do.call(append,list(as.name(gene),g)))
+    #assign(gene,append(as.name(gene),g))
+    g=""
+  }
+}
+
+#do.call("<-",list(parameter_name, parameter_value))
+
+for(i in seq(nrow(df))){
+  entry=as.character(df$gene[i])
+  if(str_detect(entry,"mt Genome")){
+    mt_Genome[i]=as.character(df$accession[i])
+    mt_COI[i]=mt_12S[i]=mt_16S[i]=mt_COX2[i]=mt_COX3[i]=mt_ATP6[i]=mt_CytB[i]="mt Genome"
+  }
+  if(str_detect(entry,"COI")){mt_COI[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"H3")){n_H3[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"12S")){mt_12S[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"16S")){mt_16S[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"18S")){n_18S[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"28S")){n_28S[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"RpS5")){n_RpS5[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"RpS2")){n_RpS2[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"ArgKin")){ArgKin[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"EF1a")){EF1a[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"GAPDH")){GAPDH[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"ID")){ID[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"MDH")){MDH[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"CAD")){CAD[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"Wgl")){Wgl[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"COX2")){mt_COX2[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"COX3")){mt_COX3[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"ATP6")){mt_ATP6[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"CytB")){mt_CytB[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"HSP70")){HSP70[i]=as.character(df$accession[i])}
+  if(str_detect(entry,"ITS2")){n_ITS2[i]=as.character(df$accession[i])}
+}
+
+gene_table=df[,c(2:4,10)]
+gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
+
+#gene_table=data.frame(gene_table,mt_Genome,mt_COI,n_18S,n_28S,n_H3,mt_12S,mt_16S,n_RpS5,n_RpS2,ArgKin,EF1a,GAPDH,ID,MDH,CAD,Wgl,mt_COX2,mt_COX3,mt_ATP6,mt_CytB,HSP70,n_ITS2,stringsAsFactors=FALSE)
+
+#gene_table=do.call(data.frame,as.list(genelist))
+
+
+
+
+#aggregate rows where voucher # matches (omits rows where voucher is NA)
+gt=aggregate(gene_table, by=list(gene_table$voucher), max, na.rm=TRUE)
+
+#remove Group.1 row
+gt=gt[,c(2:ncol(gt))]
+
+#replace rows where voucher is NA
+gt=rbind(gt,gene_table[is.na(voucher),])
+```
