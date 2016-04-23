@@ -79,7 +79,7 @@ echo $TAXA.downloaded!
 
 #TAXA="Amphipoda"
 
-TAXA="Hyperiidea"
+#TAXA="Hyperiidea"
 #TAXA="GammarideaIngolfiellidea"
 #TAXA="Senticaudata"
 
@@ -95,6 +95,8 @@ TAXA="Hyperiidea"
 
 #TAXA="Hadziida"
 #TAXA="Talitrida"
+
+TAXA="Amphipoda5gene"
 
 #DATABASE="popset"
 DATABASE="nucleotide"
@@ -126,8 +128,8 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","S18","small subunit ribosomal","28S","histone H{0,1}3","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","COX2","COX3","COIII","ATP6","cytochrome b","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","unknown mRNA","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)","myosin heavy chain","whole genome shotgun","transcriptome shotgun"),
-  genelist=c("mt_COI","mt_COI","mt_12S","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_RpS5","n_RpS2","n_ArgKin","n_EF1a","n_EF1a","n_GAPDH","n_IDH","n_MDH","n_CAD","n_Wgl","mt_COX2","mt_COX3","mt_COX3","mt_ATP6","mt_CytB","n_hsp70","n_hsp70_2","n_hsp70_1","mt_Genome","mt_Genome","mt_Genome_partial","n_ITS2","n_ITS1","n_transposon","Unknown","Unknown","anonymous_locus","n_NAK_ATPase","n_NAK_ATPase","n_PTGS","n_PTGS","n_GH7D","n_GH7A","n_actin","n_Abcb1","n_MnSOD","n_hemocyanin","mt_ND5","mt_ND2","CsDll","RNAseq_contig","microsat","n_Rh","n_MHC","whole_genome_shotgun","transcriptome_shotgun")
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}oxidase [subunit ]{0,8}[I1i][^1Ii]","[cC][Oo][Xx]{0,1}[1Ii][^1Ii]","12S","16S","large subunit.*mitochondrial","18S","S18","small subunit ribosomal","28S","histone [Hh]{0,1}3","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","[cC][Oo][Xx]{0,1}2","[Cc][Oo][Xx]{0,1}II[^I]","[cC][Oo][Xx]{0,1}3","[Cc][Oo][Xx]{0,1}III","ATP6","cytochrome [Bb]","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA,]{2,7}, complete genome","complete mitochondrial genome","mitochondr[onal DNA,]{2,7} partial genome","partial mitochondrial genome","[Ii][TtGg][Ss]","internal transcribed spacer","transposon","Unknown sequence","unknown mRNA","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)","myosin heavy chain","whole genome shotgun","transcriptome shotgun"),
+  genelist=c("mt_COI","mt_COI","mt_12S","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_RpS5","n_RpS2","n_ArgKin","n_EF1a","n_EF1a","n_GAPDH","n_IDH","n_MDH","n_CAD","n_Wgl","mt_COX2","mt_COX2","mt_COX3","mt_COX3","mt_ATP6","mt_CytB","n_hsp70","n_hsp70_2","n_hsp70_1","mt_Genome","mt_Genome","mt_Genome_partial","mt_Genome_partial","n_ITS","n_ITS","n_transposon","Unknown","Unknown","anonymous_locus","n_NAK_ATPase","n_NAK_ATPase","n_PTGS","n_PTGS","n_GH7D","n_GH7A","n_actin","n_Abcb1","n_MnSOD","n_hemocyanin","mt_ND5","mt_ND2","CsDll","RNAseq_contig","microsat","n_Rh","n_MHC","whole_genome_shotgun","transcriptome_shotgun")
 )
 
 #initiate vectors
