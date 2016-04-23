@@ -67,9 +67,6 @@ echo $TAXA.downloaded!
 
 ```
 
-Queries used to download data:
-Gammaridea[ORGN] OR Ingolfiellidea[ORGN] NOT Environmental samples[ORGN] 
-Hyperiidea[ORGN] NOT Environmental samples[ORGN]
 
 
 
@@ -335,28 +332,3 @@ gt_filename=paste(TAXA,DATABASE,"genetable.txt",sep=".")
 write.table(gt, gt_filename, sep="\t",row.names=FALSE)
 
 ```
-
-Notes:
-Check gene calls for these Accession #s (from Corophiida nucleotide data):
-"large subunit ribosomal RNA gene,
-            partial sequence; mitochondrial"
-KP316286 KP316285 KP316276 KP316274 KP316272 ...
-#currently recorded as 16S mitochondrial
-
-Check "small subunit ribosomal"
-#currently recorded as 18S nuclear
-
-Lots of RNAseq contigs listed for QUERY="Gammarida"
-"contig_\\d+_\\d+ transcribed RNA"
-#currently recorded as RNAseq contig
-
-Voucher pattern changed to include at least 1 digit and no "," because of Nahavandi,N., Ketmaier,V. and Tiedemann,R. :
-JQ180476.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population AST, Caspian Sea"
-JQ180473.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population SU1, Black Sea"
-
-
-ToDo:
-1. Add gene lookup table genes to gene table
-
-
-

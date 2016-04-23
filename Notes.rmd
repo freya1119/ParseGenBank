@@ -1,3 +1,29 @@
+Notes:
+
+Check gene calls for these Accession #s (from Corophiida nucleotide data):
+"large subunit ribosomal RNA gene,
+            partial sequence; mitochondrial"
+KP316286 KP316285 KP316276 KP316274 KP316272 ...
+#currently recorded as 16S mitochondrial
+
+Check "small subunit ribosomal"
+#currently recorded as 18S nuclear
+
+Lots of RNAseq contigs listed for QUERY="Gammarida"
+"contig_\\d+_\\d+ transcribed RNA"
+#currently recorded as RNAseq contig
+
+Voucher pattern changed to include at least 1 digit and no "," because of Nahavandi,N., Ketmaier,V. and Tiedemann,R. :
+JQ180476.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population AST, Caspian Sea"
+JQ180473.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population SU1, Black Sea"
+
+Queries used to download data:
+Gammaridea[ORGN] OR Ingolfiellidea[ORGN] NOT Environmental samples[ORGN] 
+Hyperiidea[ORGN] NOT Environmental samples[ORGN]
+
+###Download filtered data for 5 genes only
+
+git checkout -b five-gene
 
 Hyperiidea[ORGN] (cox1[GENE] or coi[GENE]) 
 Hyperiidea[ORGN] (cox1 or coi) 
@@ -18,6 +44,9 @@ Hyperiidea[ORGN] H3
 
 Hyperiidea[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3)
 337
+
+Amphipoda[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3) NOT Environmental samples[ORGN]
+18445
 
 
 
