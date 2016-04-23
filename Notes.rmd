@@ -1,0 +1,25 @@
+
+Hyperiidea[ORGN] (cox1[GENE] or coi[GENE]) 
+Hyperiidea[ORGN] (cox1 or coi) 
+130
+
+Hyperiidea[ORGN] "16S ribosomal RNA"
+Hyperiidea[ORGN] 16S
+3
+
+Hyperiidea[ORGN] (18S or "small subunit ribosomal")
+95 (1 extra 28S sequence because "18S" in title)
+
+Hyperiidea[ORGN] 28S
+60 (1 extra 18S sequence because "28S" in title)
+
+Hyperiidea[ORGN] H3
+51
+
+Hyperiidea[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3)
+337
+
+
+
+
+

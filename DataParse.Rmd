@@ -30,6 +30,9 @@ At UNIX command line enter:
 #TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
 
 TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
+
+
+
 #TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
 #TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
 
@@ -61,7 +64,14 @@ esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
 echo $TAXA.downloaded!
 
 
+
 ```
+
+Queries used to download data:
+Gammaridea[ORGN] OR Ingolfiellidea[ORGN] NOT Environmental samples[ORGN] 
+Hyperiidea[ORGN] NOT Environmental samples[ORGN]
+
+
 
 ##Read Data into R
 
@@ -70,10 +80,16 @@ echo $TAXA.downloaded!
 #TAXA="scinidae"
 #TAXA="hyperia"
 
+#TAXA="Amphipoda"
+
 TAXA="Hyperiidea"
+#TAXA="GammarideaIngolfiellidea"
+#TAXA="Senticaudata"
+
+
 #TAXA="Gammaridea"
 #TAXA="Ingolfiellidea"
-##TAXA="Senticaudata" #not downloaded - too large?
+##TAXA="Senticaudata"
 #TAXA="Bogidiellida"
 #TAXA="Corophiida"
 
