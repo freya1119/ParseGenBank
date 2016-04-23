@@ -1,108 +1,52 @@
 ---
-title: "GenBank_Data"
-author: "Biancani"
-date: "April 8, 2016"
+title: "Parse GenBank Data"
+author: "Leann M. Biancani"
 output: pdf_document
 ---
 #Download Data from GenBank:
 
-##Entrez Direct (EDirect) Installation
-http://www.ncbi.nlm.nih.gov/books/NBK179288/#chapter6.Getting_Started
+NCBI nucleotide database: http://www.ncbi.nlm.nih.gov/nuccore
 
-At UNIX command line, enter:
-```{bash, eval=FALSE}
-cd ~
-perl -MNet::FTP -e \
-'$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1); $ftp->login;
-$ftp->binary; $ftp->get("/entrez/entrezdirect/edirect.zip");'
-unzip -u -q edirect.zip
-rm edirect.zip
-export PATH=$PATH:$HOME/edirect
-./edirect/setup.sh
+##Search terms:
+
+#### Hyperiidea[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
+
+Total # of sequences: 337
+
+```{r, eval=FALSE}
+TAXA = "Hyperiidea.5genes"
 ```
 
-##Use EDirect to Download Fasta & GenBank Files
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
 
-At UNIX command line enter:
-```{bash, eval=FALSE}
-# specify options for fasta files:
-#TAXA=scinidae; DATABASE=popset; FORMAT=fasta
-#TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
+Total # of sequences: 19617
 
-TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
-
-
-
-#TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
-#TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
-
-TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
-
-##subgroups of Senticaudata:
-#TAXA=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
-#TAXA=Corophiida; DATABASE=nucleotide; FORMAT=fasta
-##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #error fixed, okay now
-#TAXA=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
-#TAXA=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
-#TAXA=unclassified Senticaudata
-
-TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
-
-
-QUERY=$TAXA"[ORGN] NOT Environmental samples[ORGN]"
-#NOT Environmental samples eliminates 20 sequences in Amphipoda
-
-FILENAME=$DATABASE.$TAXA.$FORMAT
-esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
-
-#options to change for genbank files:
-FORMAT=gb
-
-FILENAME=$DATABASE.$TAXA.$FORMAT
-esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
-
-echo $TAXA.downloaded!
-
-
-
+```{r, eval=FALSE}
+TAXA = "Amphipoda.5genes"
 ```
 
+#### Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
 
+Total # of sequences: 9125
+
+```{r, eval=FALSE}
+TAXA = "Isopoda.5genes"
+```
+
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
+
+Total # of sequences: 28742
+
+```{r, eval=FALSE}
+TAXA = "Amphipoda.Isopoda.5genes"
+```
 
 
 ##Read Data into R
 
-```{r}
-#specify options used above for EDirect:
-#TAXA="scinidae"
-#TAXA="hyperia"
-
-#TAXA="Amphipoda"
-
-#TAXA="Hyperiidea"
-#TAXA="GammarideaIngolfiellidea"
-#TAXA="Senticaudata"
-
-
-#TAXA="Gammaridea"
-#TAXA="Ingolfiellidea"
-##TAXA="Senticaudata"
-#TAXA="Bogidiellida"
-#TAXA="Corophiida"
-
-#TAXA="Gammarida"
-
-
-#TAXA="Hadziida"
-#TAXA="Talitrida"
-
-TAXA="Amphipoda5gene"
-
-#DATABASE="popset"
-DATABASE="nucleotide"
-
-fasta_filename=paste(DATABASE,TAXA,"fasta",sep=".")
-genbank_filename=paste(DATABASE,TAXA,"gb",sep=".")
+```{r eval=FALSE}
+fasta_filename=paste(TAXA,"fasta",sep=".")
+genbank_filename=paste(TAXA,"gb",sep=".")
 
 #read data into R
 fasta=readLines(fasta_filename)

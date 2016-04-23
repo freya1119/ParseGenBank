@@ -741,3 +741,29 @@ gt=gt[,c(2:ncol(gt))]
 #replace rows where voucher is NA
 gt=rbind(gt,gene_table[is.na(voucher),])
 ```
+
+##Use EDirect to Download Fasta & GenBank Files
+
+At UNIX command line enter:
+  ```{bash, eval=FALSE}
+# specify options for fasta files:
+
+TAXA=Amphipoda; DATABASE=nucleotide; FORMAT=fasta
+
+QUERY=$TAXA"[ORGN] NOT Environmental samples[ORGN]"
+#NOT Environmental samples eliminates 20 sequences in Amphipoda
+
+FILENAME=$DATABASE.$TAXA.$FORMAT
+esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
+
+#options to change for genbank files:
+FORMAT=gb
+
+FILENAME=$DATABASE.$TAXA.$FORMAT
+esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
+
+echo $TAXA.downloaded!
+  
+  
+  
+  ```
