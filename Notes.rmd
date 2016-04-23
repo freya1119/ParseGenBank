@@ -48,6 +48,100 @@ Hyperiidea[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S 
 Amphipoda[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3) NOT Environmental samples[ORGN]
 18445
 
+###Variants (not case-sensitive):
+
+#### COI
+
+Amphipoda[ORGN] coi
+10946
+co1
+Amphipoda[ORGN] co1 not (coi)
+207
+Amphipoda[ORGN] coxi not (coi or co1)
+1
+Amphipoda[ORGN] cox1 not (coi or co1 or coxi)
+1689
+Amphipoda[ORGN] "cytochrome oxidase subunit  1" not (coi or co1 or coxi or cox1)
+285
+Amphipoda[ORGN] "cytochrome oxidase subunit  i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit  1")
+57
+Amphipoda[ORGN] "cytochrome oxidase i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i")
+23
+Amphipoda[ORGN] "cytochrome c oxidase subunit 1" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i")
+20
+Amphipoda[ORGN] "cytochrome c oxidase subunit i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1") 
+549
+
+Amphipoda[ORGN] (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") 
+13777
+
+NA:
+"cytochrome oxidase 1"
+"co i"
+"co 1"
+"cox i"
+"cox 1"
+
+NA:
+S12
+
+#### 16S
+
+Amphipoda[ORGN] 16S
+1920
+Amphipoda[ORGN] "large subunit" mitochondrial not 16S 
+102
+
+Amphipoda[ORGN] (("large subunit" mitochondrial) or 16S)
+2022
+
+NA:
+S16
+
+#### 18S
+
+Amphipoda[ORGN] 18S
+1590
+Amphipoda[ORGN] S18 not 18S
+1
+Amphipoda[ORGN] "small subunit" not mitochondrial not (18S or S18)
+10 (7 are environmental samples - will be filtered out)
+
+Amphipoda[ORGN] (("small subunit" not mitochondrial) or 18S or S18)
+1601
+
+#### 28S
+
+Amphipoda[ORGN] 28S
+2375
+Amphipoda[ORGN] "large subunit" not mitochondrial not 28S
+0
+
+NA:
+S28
+
+#### H3
+
+Amphipoda[ORGN] H3
+432
+Amphipoda[ORGN] "histone 3" not H3
+0
+
+NA:
+H-3
+
+#### All 5:
+Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3))
+19637
+
+Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3))
+9129
+
+
+
+
+
+
 
 
 
