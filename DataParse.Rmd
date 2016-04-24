@@ -72,7 +72,7 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","genome"),
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","mito.*genome"),
   genelist=c("mt_COI","mt_COI","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_H3","mt_genome")
 )
 
@@ -171,6 +171,9 @@ for (i in seq(length(fasta))) {
     #voucher number from gb
     vou_pattern="voucher=\"([^\",]*\\d[^\",]*)\""
     vou=str_replace(str_extract(gb,vou_pattern),vou_pattern,"\\1")
+    if(!is.na(vou)){
+      if(str_detect(vou,"collection")){vou=NA}
+    }
     voucher=append(voucher,vou)
     
     #country from gb
@@ -271,6 +274,23 @@ gt=gt[,c(2:ncol(gt))]
 
 #replace rows where voucher is NA
 gt=rbind(gt,gene_table[is.na(voucher),])
+
+#turn lists into character strings & cleanup:
+
+for(i in seq(nrow(gt))){
+  for(j in seq(ncol(gt))){
+    cell = gt[i,j]
+    if(!is.na(cell)){
+      cell = paste(c(cell[[1]]), collapse=", ")
+      cell = str_replace(cell,", $","")
+      cell = str_replace(cell,"^, ","")
+      gt[i,j]=(cell)
+    }
+  }
+}
+
+gt[] = lapply(gt, as.character)
+gt[] = transform(gt, taxon_id = as.numeric(taxon_id))
 ```
 
 ##Build TaxonID table
@@ -284,16 +304,33 @@ ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
 #remove Group.1 row
 ID=ID[,c(2:ncol(ID))]
 
+#turn lists into character strings & cleanup:
+for(i in seq(nrow(ID))){
+  for(j in seq(ncol(ID))){
+    cell = ID[i,j]
+    if(!is.na(cell)){
+      cell = paste(c(cell[[1]]), collapse=", ")
+      cell = str_replace(cell,", $","")
+      cell = str_replace(cell,"^, ","")
+      ID[i,j]=(cell)
+    }
+  }
+}
+
+ID[] = lapply(ID, as.character)
+ID[] = transform(ID, taxon_id = as.numeric(taxon_id))
 ```
 
 ##Output Data
 
 ```{r, eval=FALSE, tidy=TRUE}
 #parsed data table
-df_filename=paste(TAXA,DATABASE,"alldata.txt",sep=".")
+df_filename=paste(TAXA,"alldata.txt",sep=".")
 write.table(df, df_filename, sep="\t",row.names=FALSE)
 #gene table
-gt_filename=paste(TAXA,DATABASE,"genetable.txt",sep=".")
+gt_filename=paste(TAXA,"genetable.txt",sep=".")
 write.table(gt, gt_filename, sep="\t",row.names=FALSE)
-
+#taxonID table
+id_filename=paste(TAXA,"taxonIDtable.txt",sep=".")
+write.table(ID, id_filename, sep="\t",row.names=FALSE)
 ```
