@@ -44,6 +44,7 @@ TAXA = "Amphipoda.Isopoda.5genes"
 
 ##Read Data into R
 
+
 ```{r eval=FALSE}
 fasta_filename=paste(TAXA,"fasta",sep=".")
 genbank_filename=paste(TAXA,"gb",sep=".")
