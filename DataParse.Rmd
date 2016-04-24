@@ -63,7 +63,8 @@ genbank_vector=c()
 gb=""
 for(line in genbank){
   gb=paste(gb,line,sep=" ")
-  if(str_detect(line,"//")){
+  if(line=="//"){
+  #if(str_detect(line,"//")){
     gb=str_replace_all(gb," +"," ")
     genbank_vector=append(genbank_vector,gb)
     gb=""
@@ -82,6 +83,7 @@ sequence=c()
 species_name=c()
 organism=c()
 accession=c()
+accession_gb=c()
 description=c()
 
 voucher=c()
@@ -156,6 +158,11 @@ for (i in seq(length(fasta))) {
     #parse data from genbank file:
     gb=genbank_vector[record]
     
+    #accession from gb
+    accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
+    acc_gb=str_replace(str_extract(gb,accession_pattern),accession_pattern,"\\1")
+    accession_gb=append(accession_gb,acc_gb)
+    
     #organism from gb
     org_pattern="organism=\"([^\"]+)\""
     org=str_replace(str_extract(gb,org_pattern),org_pattern,"\\1")
@@ -227,7 +234,7 @@ for (i in seq(length(fasta))) {
 }
 sequence=append(sequence,seq)
 
-df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
+df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
 print(others)
 
@@ -269,7 +276,7 @@ gt=rbind(gt,gene_table[is.na(voucher),])
 
 ```{r, eval=FALSE}
 
-# ID_table=gt[,c(1,3,6:ncol(gt))]
+ID_table=gt[,c(1,3,6:ncol(gt))]
 # 
 # ID=aggregate(ID_table, by=list(ID_table$taxon_id), max)
 # ID=aggregate(ID_table, by=list(ID_table$taxon_id), toString)
@@ -277,7 +284,7 @@ gt=rbind(gt,gene_table[is.na(voucher),])
 # ID=aggregate(ID_table, by=list(ID_table$taxon_id), list)
 # ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
 # 
-# Species_by_ID=aggregate(ID_table[,c(1,2)], by=list(ID_table$taxon_id), max)
+Species_by_ID=aggregate(ID_table[,c(1,2)], by=list(ID_table$taxon_id), max)
 # Genes_by_ID=aggregate(ID_table[,c(2:ncol(ID_table))], by=list(ID_table$taxon_id), unique)
 
 ```
