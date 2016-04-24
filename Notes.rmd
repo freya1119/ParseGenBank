@@ -1,4 +1,8 @@
 Notes:
+##Build Gene Table
+#For Amphipoda data - Warning message:
+#In eval(expr, envir, enclos) : NAs introduced by coercion
+#because Voucher #s do not point to unique taxon_ids so id's are listed and cannot be converted to numeric
 
 Check gene calls for these Accession #s (from Corophiida nucleotide data):
 "large subunit ribosomal RNA gene,

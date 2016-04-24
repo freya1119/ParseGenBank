@@ -291,6 +291,10 @@ for(i in seq(nrow(gt))){
 
 gt[] = lapply(gt, as.character)
 gt[] = transform(gt, taxon_id = as.numeric(taxon_id))
+
+#For Amphipoda data - Warning message:
+#In eval(expr, envir, enclos) : NAs introduced by coercion
+#because Voucher #s do not point to unique taxon_ids so id's are listed and cannot be converted to numeric
 ```
 
 ##Build TaxonID table
