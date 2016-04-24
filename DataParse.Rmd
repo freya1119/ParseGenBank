@@ -237,8 +237,7 @@ print(others)
 
 ```{r, eval=FALSE, tidy=TRUE}
 
-genelist=(unique(as.character(genelookup$genelist)))
-########Add "other" ?
+genelist=append((unique(as.character(genelookup$genelist))),"other")
 
 #initialize gene vectors:
 for(gene in genelist) {assign(gene,c())}
@@ -253,7 +252,7 @@ for(i in seq(nrow(df))){
   }
 }
 
-gene_table=df[,c(2:4,10)]
+gene_table=df[,c(1:4,10)]
 gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
 
 #aggregate rows where voucher # matches (omits rows where voucher is NA)
@@ -264,6 +263,23 @@ gt=gt[,c(2:ncol(gt))]
 
 #replace rows where voucher is NA
 gt=rbind(gt,gene_table[is.na(voucher),])
+```
+
+##Build TaxonID table
+
+```{r, eval=FALSE}
+
+# ID_table=gt[,c(1,3,6:ncol(gt))]
+# 
+# ID=aggregate(ID_table, by=list(ID_table$taxon_id), max)
+# ID=aggregate(ID_table, by=list(ID_table$taxon_id), toString)
+# ID=aggregate(ID_table, by=list(ID_table$taxon_id), paste)
+# ID=aggregate(ID_table, by=list(ID_table$taxon_id), list)
+# ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
+# 
+# Species_by_ID=aggregate(ID_table[,c(1,2)], by=list(ID_table$taxon_id), max)
+# Genes_by_ID=aggregate(ID_table[,c(2:ncol(ID_table))], by=list(ID_table$taxon_id), unique)
+
 ```
 
 ##Output Data
