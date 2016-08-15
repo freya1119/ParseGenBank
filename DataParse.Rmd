@@ -240,6 +240,7 @@ sequence=append(sequence,seq)
 df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
 print(others)
+df_others<-df[gene=="other",]
 
 ```
 
