@@ -116,7 +116,7 @@ for (i in seq(length(fasta))) {
   if (str_detect(line,fixed(">"))){
     #if sequence was recorded for previous record, add it to the sequence vector
     if (i>1) {sequence=append(sequence,dna)}
-    dna="" #reset seq
+    dna="" #reset dna
     
     record=record+1 #track record number
     
@@ -231,7 +231,7 @@ for (i in seq(length(fasta))) {
     }
     
   } else {
-    # if the line is not a header, add the line to seq
+    # if the line is not a header, add the line to dna
     dna=paste(dna,line,sep="")
   }
 }
@@ -266,6 +266,18 @@ for(i in seq(nrow(df))){
 gene_table=df[,c(1:5,11)]
 gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
 ```
+
+##Build Fasta File for Each Gene
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+
+```
+
 
 ##Build TaxonID table
 
