@@ -793,3 +793,57 @@ ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
 ID=ID[,c(2:ncol(ID))]
 
 ```
+
+
+
+Removed from Code:
+  # #Aggregate - Not working
+  # ############
+# #aggregate rows where voucher # matches (omits rows where voucher is NA)
+# gt=aggregate(gene_table, by=list(gene_table$voucher), FUN=unique)
+# 
+# #remove Group.1 row
+# gt=gt[,c(2:ncol(gt))]
+# 
+# #replace rows where voucher is NA
+# gt=rbind(gt,gene_table[is.na(voucher),])
+# 
+# #turn lists into character strings & cleanup:
+# 
+# for(i in seq(nrow(gt))){
+#   for(j in seq(ncol(gt))){
+#     cell = gt[i,j]
+#     if(!is.na(cell)){
+#       cell = paste(c(cell[[1]]), collapse=", ")
+#       cell = str_replace(cell,", $","")
+#       cell = str_replace(cell,"^, ","")
+#       gt[i,j]=(cell)
+#     }
+#   }
+# }
+# 
+# gt[] = lapply(gt, as.character)
+# gt[] = transform(gt, taxon_id = as.numeric(taxon_id))
+# 
+# #For Amphipoda data - Warning message:
+# #In eval(expr, envir, enclos) : NAs introduced by coercion
+# #because Voucher #s do not point to unique taxon_ids so id's are listed and cannot be converted to numeric
+
+Fasta code not used:
+  
+  #define function for detecting empty strings:
+  #NOT NECESSARY:
+  #not_empty<-function(x){str_length(x)>0}
+  
+  
+  #for (gene in genelist) {
+  #Filter individual gene vectors to remove empty strings (producing a vector of accession numbers for each gene):
+  #  assign(gene,do.call(Filter,list(not_empty,as.name(gene))))
+  #}
+  ###
+
+#gene_fasta=paste(gene,"fasta",sep="_")
+#assign(gene_fasta, )
+
+
+
