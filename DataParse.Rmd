@@ -35,7 +35,7 @@ TAXA = "Isopoda.5genes"
 
 #### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
 
-Total # of sequences: 28742
+Total # of sequences: 28742 (29858 on 9/2/16)
 
 ```{r, eval=FALSE}
 TAXA = "Amphipoda.Isopoda.5genes"
