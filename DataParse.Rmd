@@ -3,7 +3,6 @@ title: "Parse GenBank Data"
 author: "Leann M. Biancani"
 output: pdf_document
 ---
-#creating hou-hurt-data files
 #Download Data from GenBank:
 
 NCBI nucleotide database: http://www.ncbi.nlm.nih.gov/nuccore
