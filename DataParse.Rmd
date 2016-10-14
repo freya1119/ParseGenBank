@@ -303,6 +303,43 @@ for (i in seq(nrow(gene_df))){
 
 ```
 
+##Create Hurt & Hurt list
+```{r, eval=FALSE}
+HurtHouList=readLines("hurt_hou_accessions.txt")
+HurtHouList=str_split(HurtHouList," ")
+HurtHouList=unique(HurtHouList[[1]])
+```
+
+##Build Fasta File for Hou & Hurt Data
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+for (gene in genelist) {
+  #extract rows from df where genbank accession number is in gene vector:
+  gene_df=df[as.logical(do.call(match,list(df$accession,as.name(gene),0))),]
+  #extract rows from gene_df where genbank accession number is in HurtHouList vector:
+  HH_gene_df=gene_df[gene_df$accession_gb %in% HurtHouList,]
+  filename=paste("HH_",gene,".fasta",sep="")
+  fasta_file=file(filename,"at")
+  
+  locateColNames=function(x){which(colnames(df) == x)}
+  headindex=sapply(c("species_name","accession_gb"),locateColNames)
+  seqindex=locateColNames("sequence")
+  
+  for (i in seq(nrow(HH_gene_df))){
+    if(i==1){begin=">"}else{begin="\n>"}
+    gene_fasta=c(begin,sapply(as.character(HH_gene_df[i,headindex]),paste,"|",sep=""),gene,"\n",HH_gene_df[i,seqindex])
+    writeLines(gene_fasta,con=fasta_file,sep="")
+  }
+  
+  close(fasta_file)
+}
+
+```
 
 ##Build TaxonID table
 
