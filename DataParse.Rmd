@@ -340,7 +340,7 @@ df_filename=paste(TAXA,"alldata.txt",sep=".")
 write.table(df, df_filename, sep="\t",row.names=FALSE)
 #gene table
 gt_filename=paste(TAXA,"genetable.txt",sep=".")
-write.table(gt, gt_filename, sep="\t",row.names=FALSE)
+write.table(gene_table, gt_filename, sep="\t",row.names=FALSE)
 #taxonID table
 id_filename=paste(TAXA,"taxonIDtable.txt",sep=".")
 write.table(ID, id_filename, sep="\t",row.names=FALSE)
