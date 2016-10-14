@@ -281,24 +281,18 @@ for (gene in genelist) {
   filename=paste(gene,"fasta",sep=".")
   fasta_file=file(filename,"at")
   
-  locateColNames=function(x){which(colnames(df) == x)}
+  locateColNames=function(x){which(colnames(gene_df) == x)}
   headindex=sapply(c("taxon_id","species_name","accession"),locateColNames)
   seqindex=locateColNames("sequence")
   
   for (i in seq(nrow(gene_df))){
     if(i==1){begin=">"}else{begin="\n>"}
-    gene_fasta=c(begin,sapply(as.character(df[i,headindex]),paste,"|",sep=""),gene,"\n",df[i,seqindex])
+    gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),gene,"\n",gene_df[i,seqindex])
     writeLines(gene_fasta,con=fasta_file,sep="")
   }
   
   close(fasta_file)
 }
-
-
-for (i in seq(nrow(gene_df))){
-  header=as.character(df[i,c(1,7)])
-}
-
 
 
 ```
@@ -326,7 +320,7 @@ for (gene in genelist) {
   filename=paste("HH_",gene,".fasta",sep="")
   fasta_file=file(filename,"at")
   
-  locateColNames=function(x){which(colnames(df) == x)}
+  locateColNames=function(x){which(colnames(HH_gene_df) == x)}
   headindex=sapply(c("species_name","accession_gb"),locateColNames)
   seqindex=locateColNames("sequence")
   
