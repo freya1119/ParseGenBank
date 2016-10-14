@@ -326,8 +326,11 @@ for (gene in genelist) {
   
   for (i in seq(nrow(HH_gene_df))){
     if(i==1){begin=">"}else{begin="\n>"}
-    gene_fasta=c(begin,sapply(as.character(HH_gene_df[i,headindex]),paste,"|",sep=""),gene,"\n",HH_gene_df[i,seqindex])
-    writeLines(gene_fasta,con=fasta_file,sep="")
+    gene_fasta=c(begin,sapply(as.character(HH_gene_df[i,headindex]),paste,sep=""),"\n",HH_gene_df[i,seqindex])
+    #remove spaces and . from names
+    gene_fasta[2]=str_replace_all(gene_fasta[2]," ","_")
+    gene_fasta[2]=str_replace_all(gene_fasta[2],fixed("."),"")
+  writeLines(gene_fasta,con=fasta_file,sep="")
   }
   
   close(fasta_file)
