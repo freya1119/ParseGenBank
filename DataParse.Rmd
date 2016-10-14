@@ -1,109 +1,51 @@
 ---
-title: "GenBank_Data"
-author: "Biancani"
-date: "April 8, 2016"
+title: "Parse GenBank Data"
+author: "Leann M. Biancani"
 output: pdf_document
 ---
 #Download Data from GenBank:
 
-##Entrez Direct (EDirect) Installation
-http://www.ncbi.nlm.nih.gov/books/NBK179288/#chapter6.Getting_Started
+NCBI nucleotide database: http://www.ncbi.nlm.nih.gov/nuccore
 
-At UNIX command line, enter:
-```{bash, eval=FALSE}
-cd ~
-perl -MNet::FTP -e \
-'$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1); $ftp->login;
-$ftp->binary; $ftp->get("/entrez/entrezdirect/edirect.zip");'
-unzip -u -q edirect.zip
-rm edirect.zip
-export PATH=$PATH:$HOME/edirect
-./edirect/setup.sh
+##Search terms:
+
+#### Hyperiidea[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
+
+Total # of sequences: 337
+
+```{r, eval=FALSE}
+TAXA = "Hyperiidea.5genes"
 ```
 
-##Use EDirect to Download Fasta & GenBank Files
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
 
-At UNIX command line enter:
-```{bash, eval=FALSE}
-# specify options for fasta files:
-#TAXA=scinidae; DATABASE=popset; FORMAT=fasta
-#TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
+Total # of sequences: 19617
 
-TAXA=Hyperiidea; DATABASE=nucleotide; FORMAT=fasta
-
-
-
-#TAXA=Gammaridea; DATABASE=nucleotide; FORMAT=fasta
-#TAXA=Ingolfiellidea; DATABASE=nucleotide; FORMAT=fasta
-
-TAXA=Senticaudata; DATABASE=nucleotide; FORMAT=fasta #too large?
-
-##subgroups of Senticaudata:
-#TAXA=Bogidiellida; DATABASE=nucleotide; FORMAT=fasta
-#TAXA=Corophiida; DATABASE=nucleotide; FORMAT=fasta
-##TAXA=Gammarida; DATABASE=nucleotide; FORMAT=fasta #error fixed, okay now
-#TAXA=Hadziida; DATABASE=nucleotide; FORMAT=fasta #downloaded, not run yet
-#TAXA=Talitrida; DATABASE=nucleotide; FORMAT=fasta #not downloaded yet
-#TAXA=unclassified Senticaudata
-
-TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
-
-
-QUERY=$TAXA"[ORGN] NOT Environmental samples[ORGN]"
-#NOT Environmental samples eliminates 20 sequences in Amphipoda
-
-FILENAME=$DATABASE.$TAXA.$FORMAT
-esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
-
-#options to change for genbank files:
-FORMAT=gb
-
-FILENAME=$DATABASE.$TAXA.$FORMAT
-esearch -db $DATABASE -query $QUERY | efetch -format $FORMAT > $FILENAME
-
-echo $TAXA.downloaded!
-
-
-
+```{r, eval=FALSE}
+TAXA = "Amphipoda.5genes"
 ```
 
-Queries used to download data:
-Gammaridea[ORGN] OR Ingolfiellidea[ORGN] NOT Environmental samples[ORGN] 
-Hyperiidea[ORGN] NOT Environmental samples[ORGN]
+#### Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
 
+Total # of sequences: 9125
 
+```{r, eval=FALSE}
+TAXA = "Isopoda.5genes"
+```
+
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
+
+Total # of sequences: 28742 (29858 on 9/2/16)
+
+```{r, eval=FALSE}
+TAXA = "Amphipoda.Isopoda.5genes"
+```
 
 ##Read Data into R
 
-```{r}
-#specify options used above for EDirect:
-#TAXA="scinidae"
-#TAXA="hyperia"
-
-#TAXA="Amphipoda"
-
-TAXA="Hyperiidea"
-#TAXA="GammarideaIngolfiellidea"
-#TAXA="Senticaudata"
-
-
-#TAXA="Gammaridea"
-#TAXA="Ingolfiellidea"
-##TAXA="Senticaudata"
-#TAXA="Bogidiellida"
-#TAXA="Corophiida"
-
-#TAXA="Gammarida"
-
-
-#TAXA="Hadziida"
-#TAXA="Talitrida"
-
-#DATABASE="popset"
-DATABASE="nucleotide"
-
-fasta_filename=paste(DATABASE,TAXA,"fasta",sep=".")
-genbank_filename=paste(DATABASE,TAXA,"gb",sep=".")
+```{r eval=FALSE}
+fasta_filename=paste(TAXA,"fasta",sep=".")
+genbank_filename=paste(TAXA,"gb",sep=".")
 
 #read data into R
 fasta=readLines(fasta_filename)
@@ -121,7 +63,8 @@ genbank_vector=c()
 gb=""
 for(line in genbank){
   gb=paste(gb,line,sep=" ")
-  if(str_detect(line,"//")){
+  if(line=="//"){
+  #if(str_detect(line,"//")){
     gb=str_replace_all(gb," +"," ")
     genbank_vector=append(genbank_vector,gb)
     gb=""
@@ -129,8 +72,8 @@ for(line in genbank){
 }
 
 genelookup= data.frame(
-  rawlist=c("cytochrome [c ]{0,2}oxidase [subunit ]{0,8}[I1] ","[cC][Oo][Xx]{0,1}[1Ii][ )]","12S","16S","large subunit ribosomal RNA gene, partial sequence; mitochondrial","18S","S18","small subunit ribosomal","28S","histone H{0,1}3","RpS5","RpS2","ArgKin","EF-{0,1}1-{0,1}a","elongation factor 1[ -]a","G[aA][pP][dD][hH]","IDH","MDH","CAD","wingless","COX2","COX3","COIII","ATP6","cytochrome b","[hH][sS][pP]70[ )]","hsp70-2","hsp70-1","mitochondri[onal DNA]{2,6}, complete genome","complete mitochondrial genome","partial mitochondrial genome","internal transcribed spacer 2","internal transcribed spacer 1","transposon","Unknown sequence","unknown mRNA","anonymous locus","NAK-ATPase","sodium/potassium ATPase","prostaglandin E synthase","cyclooxygenase","GH7D","GH7A","actin","Abcb1","superoxide dismutase gene","hemocyanin","ND5","ND2","CsDll","contig_\\d+_\\d+ transcribed RNA","[Mm]icrosatellite","(Rh)","myosin heavy chain","whole genome shotgun","transcriptome shotgun"),
-  genelist=c("mt_COI","mt_COI","mt_12S","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_RpS5","n_RpS2","n_ArgKin","n_EF1a","n_EF1a","n_GAPDH","n_IDH","n_MDH","n_CAD","n_Wgl","mt_COX2","mt_COX3","mt_COX3","mt_ATP6","mt_CytB","n_hsp70","n_hsp70_2","n_hsp70_1","mt_Genome","mt_Genome","mt_Genome_partial","n_ITS2","n_ITS1","n_transposon","Unknown","Unknown","anonymous_locus","n_NAK_ATPase","n_NAK_ATPase","n_PTGS","n_PTGS","n_GH7D","n_GH7A","n_actin","n_Abcb1","n_MnSOD","n_hemocyanin","mt_ND5","mt_ND2","CsDll","RNAseq_contig","microsat","n_Rh","n_MHC","whole_genome_shotgun","transcriptome_shotgun")
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","mito.*genome"),
+  genelist=c("mt_COI","mt_COI","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_H3","mt_genome")
 )
 
 #initiate vectors
@@ -140,6 +83,7 @@ sequence=c()
 species_name=c()
 organism=c()
 accession=c()
+accession_gb=c()
 description=c()
 
 voucher=c()
@@ -164,15 +108,15 @@ journal_ref3=c()
 others=c()
 
 #parse fasta (& genbank) data
-seq=""
+dna=""
 record=0
 for (i in seq(length(fasta))) {
   line = fasta[i]
   # if a header is detected:
   if (str_detect(line,fixed(">"))){
     #if sequence was recorded for previous record, add it to the sequence vector
-    if (i>1) {sequence=append(sequence,seq)}
-    seq="" #reset seq
+    if (i>1) {sequence=append(sequence,dna)}
+    dna="" #reset dna
     
     record=record+1 #track record number
     
@@ -214,6 +158,11 @@ for (i in seq(length(fasta))) {
     #parse data from genbank file:
     gb=genbank_vector[record]
     
+    #accession from gb
+    accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
+    acc_gb=str_replace(str_extract(gb,accession_pattern),accession_pattern,"\\1")
+    accession_gb=append(accession_gb,acc_gb)
+    
     #organism from gb
     org_pattern="organism=\"([^\"]+)\""
     org=str_replace(str_extract(gb,org_pattern),org_pattern,"\\1")
@@ -222,6 +171,9 @@ for (i in seq(length(fasta))) {
     #voucher number from gb
     vou_pattern="voucher=\"([^\",]*\\d[^\",]*)\""
     vou=str_replace(str_extract(gb,vou_pattern),vou_pattern,"\\1")
+    if(!is.na(vou)){
+      if(str_detect(vou,"collection")){vou=NA}
+    }
     voucher=append(voucher,vou)
     
     #country from gb
@@ -279,15 +231,16 @@ for (i in seq(length(fasta))) {
     }
     
   } else {
-    # if the line is not a header, add the line to seq
-    seq=paste(seq,line,sep="")
+    # if the line is not a header, add the line to dna
+    dna=paste(dna,line,sep="")
   }
 }
-sequence=append(sequence,seq)
+sequence=append(sequence,dna)
 
-df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
+df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
 print(others)
+df_others<-df[gene=="other",]
 
 ```
 
@@ -295,8 +248,7 @@ print(others)
 
 ```{r, eval=FALSE, tidy=TRUE}
 
-
-genelist=(unique(as.character(genelookup$genelist)))
+genelist=append((unique(as.character(genelookup$genelist))),"other")
 
 #initialize gene vectors:
 for(gene in genelist) {assign(gene,c())}
@@ -311,52 +263,85 @@ for(i in seq(nrow(df))){
   }
 }
 
-gene_table=df[,c(2:4,10)]
+gene_table=df[,c(1:5,11)]
 gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
+```
 
-#aggregate rows where voucher # matches (omits rows where voucher is NA)
-gt=aggregate(gene_table, by=list(gene_table$voucher), max, na.rm=TRUE)
+##Build Fasta File for Each Gene
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+for (gene in genelist) {
+  #extract rows from df where accession number is in gene vector:
+  gene_df=df[as.logical(do.call(match,list(df$accession,as.name(gene),0))),]
+  filename=paste(gene,"fasta",sep=".")
+  fasta_file=file(filename,"at")
+  
+  locateColNames=function(x){which(colnames(df) == x)}
+  headindex=sapply(c("taxon_id","species_name","accession"),locateColNames)
+  seqindex=locateColNames("sequence")
+  
+  for (i in seq(nrow(gene_df))){
+    if(i==1){begin=">"}else{begin="\n>"}
+    gene_fasta=c(begin,sapply(as.character(df[i,headindex]),paste,"|",sep=""),gene,"\n",df[i,seqindex])
+    writeLines(gene_fasta,con=fasta_file,sep="")
+  }
+  
+  close(fasta_file)
+}
+
+
+for (i in seq(nrow(gene_df))){
+  header=as.character(df[i,c(1,7)])
+}
+
+
+
+```
+
+
+##Build TaxonID table
+
+```{r, eval=FALSE}
+
+ID_table=gene_table[,c(1:3,7:ncol(gene_table))]
+
+ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
 
 #remove Group.1 row
-gt=gt[,c(2:ncol(gt))]
+ID=ID[,c(2:ncol(ID))]
 
-#replace rows where voucher is NA
-gt=rbind(gt,gene_table[is.na(voucher),])
+#turn lists into character strings & cleanup:
+for(i in seq(nrow(ID))){
+  for(j in seq(ncol(ID))){
+    cell = ID[i,j]
+    if(!is.na(cell)){
+      cell = paste(c(cell[[1]]), collapse=", ")
+      cell = str_replace(cell,", $","")
+      cell = str_replace(cell,"^, ","")
+      ID[i,j]=(cell)
+    }
+  }
+}
+
+ID[] = lapply(ID, as.character)
+ID[] = transform(ID, taxon_id = as.numeric(taxon_id))
 ```
 
 ##Output Data
 
 ```{r, eval=FALSE, tidy=TRUE}
 #parsed data table
-df_filename=paste(TAXA,DATABASE,"alldata.txt",sep=".")
+df_filename=paste(TAXA,"alldata.txt",sep=".")
 write.table(df, df_filename, sep="\t",row.names=FALSE)
 #gene table
-gt_filename=paste(TAXA,DATABASE,"genetable.txt",sep=".")
-write.table(gt, gt_filename, sep="\t",row.names=FALSE)
-
+gt_filename=paste(TAXA,"genetable.txt",sep=".")
+write.table(gene_table, gt_filename, sep="\t",row.names=FALSE)
+#taxonID table
+id_filename=paste(TAXA,"taxonIDtable.txt",sep=".")
+write.table(ID, id_filename, sep="\t",row.names=FALSE)
 ```
-
-Notes:
-Check gene calls for these Accession #s (from Corophiida nucleotide data):
-"large subunit ribosomal RNA gene,
-            partial sequence; mitochondrial"
-KP316286 KP316285 KP316276 KP316274 KP316272 ...
-#currently recorded as 16S mitochondrial
-
-Check "small subunit ribosomal"
-#currently recorded as 18S nuclear
-
-Lots of RNAseq contigs listed for QUERY="Gammarida"
-"contig_\\d+_\\d+ transcribed RNA"
-#currently recorded as RNAseq contig
-
-Voucher pattern changed to include at least 1 digit and no "," because of Nahavandi,N., Ketmaier,V. and Tiedemann,R. :
-JQ180476.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population AST, Caspian Sea"
-JQ180473.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population SU1, Black Sea"
-
-
-ToDo:
-1. Add gene lookup table genes to gene table
-
-
-

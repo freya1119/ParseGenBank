@@ -1,3 +1,33 @@
+Notes:
+##Build Gene Table
+#For Amphipoda data - Warning message:
+#In eval(expr, envir, enclos) : NAs introduced by coercion
+#because Voucher #s do not point to unique taxon_ids so id's are listed and cannot be converted to numeric
+
+Check gene calls for these Accession #s (from Corophiida nucleotide data):
+"large subunit ribosomal RNA gene,
+            partial sequence; mitochondrial"
+KP316286 KP316285 KP316276 KP316274 KP316272 ...
+#currently recorded as 16S mitochondrial
+
+Check "small subunit ribosomal"
+#currently recorded as 18S nuclear
+
+Lots of RNAseq contigs listed for QUERY="Gammarida"
+"contig_\\d+_\\d+ transcribed RNA"
+#currently recorded as RNAseq contig
+
+Voucher pattern changed to include at least 1 digit and no "," because of Nahavandi,N., Ketmaier,V. and Tiedemann,R. :
+JQ180476.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population AST, Caspian Sea"
+JQ180473.1 /specimen_voucher="Institute of Biochemistry and Biology, University of Potsdam, Germany, N. Nahavandi, population SU1, Black Sea"
+
+Queries used to download data:
+Gammaridea[ORGN] OR Ingolfiellidea[ORGN] NOT Environmental samples[ORGN] 
+Hyperiidea[ORGN] NOT Environmental samples[ORGN]
+
+###Download filtered data for 5 genes only
+
+git checkout -b five-gene
 
 Hyperiidea[ORGN] (cox1[GENE] or coi[GENE]) 
 Hyperiidea[ORGN] (cox1 or coi) 
@@ -19,7 +49,101 @@ Hyperiidea[ORGN] H3
 Hyperiidea[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3)
 337
 
+Amphipoda[ORGN] (cox1 or coi or 16S or 18S or "small subunit ribosomal" or 28S or H3) NOT Environmental samples[ORGN]
+18445
 
+###Variants (not case-sensitive):
+
+#### COI
+
+Amphipoda[ORGN] coi
+10946
+co1
+Amphipoda[ORGN] co1 not (coi)
+207
+Amphipoda[ORGN] coxi not (coi or co1)
+1
+Amphipoda[ORGN] cox1 not (coi or co1 or coxi)
+1689
+Amphipoda[ORGN] "cytochrome oxidase subunit  1" not (coi or co1 or coxi or cox1)
+285
+Amphipoda[ORGN] "cytochrome oxidase subunit  i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit  1")
+57
+Amphipoda[ORGN] "cytochrome oxidase i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i")
+23
+Amphipoda[ORGN] "cytochrome c oxidase subunit 1" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i")
+20
+Amphipoda[ORGN] "cytochrome c oxidase subunit i" not (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1") 
+549
+
+Amphipoda[ORGN] (coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") 
+13777
+
+NA:
+"cytochrome oxidase 1"
+"co i"
+"co 1"
+"cox i"
+"cox 1"
+
+NA:
+S12
+
+#### 16S
+
+Amphipoda[ORGN] 16S
+1920
+Amphipoda[ORGN] "large subunit" mitochondrial not 16S 
+102
+
+Amphipoda[ORGN] (("large subunit" mitochondrial) or 16S)
+2022
+
+NA:
+S16
+
+#### 18S
+
+Amphipoda[ORGN] 18S
+1590
+Amphipoda[ORGN] S18 not 18S
+1
+Amphipoda[ORGN] "small subunit" not mitochondrial not (18S or S18)
+10 (7 are environmental samples - will be filtered out)
+
+Amphipoda[ORGN] (("small subunit" not mitochondrial) or 18S or S18)
+1601
+
+#### 28S
+
+Amphipoda[ORGN] 28S
+2375
+Amphipoda[ORGN] "large subunit" not mitochondrial not 28S
+0
+
+NA:
+S28
+
+#### H3
+
+Amphipoda[ORGN] H3
+432
+Amphipoda[ORGN] "histone 3" not H3
+0
+
+NA:
+H-3
+
+#### All 5:
+Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3))
+19637
+19617 if environmental samples removed
+
+Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3))
+9129
+9125 if environmental samples removed
+
+Total: 28742
 
 
 
