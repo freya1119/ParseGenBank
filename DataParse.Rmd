@@ -282,12 +282,16 @@ for (gene in genelist) {
   fasta_file=file(filename,"at")
   
   locateColNames=function(x){which(colnames(gene_df) == x)}
+  #return to accession instead of accession_gb due to NAs in accession_gb
   headindex=sapply(c("taxon_id","species_name","accession"),locateColNames)
   seqindex=locateColNames("sequence")
   
   for (i in seq(nrow(gene_df))){
     if(i==1){begin=">"}else{begin="\n>"}
-    gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),gene,"\n",gene_df[i,seqindex])
+    gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),"\n",gene_df[i,seqindex])
+    #remove spaces and . from names
+    gene_fasta[3]=str_replace_all(gene_fasta[3]," ","_")
+    gene_fasta[3]=str_replace_all(gene_fasta[3],fixed("."),"")
     writeLines(gene_fasta,con=fasta_file,sep="")
   }
   
