@@ -145,9 +145,21 @@ for (i in seq(length(fasta))) {
     #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
     species_name=append(species_name,str_extract(des,"[A-Z][a-z]*[ .][cfa. ]{0,5}[a-z.]+"))
     
-    #gene from fasta
+    #parse data from genbank file:
+    gb=genbank_vector[record]
+    
+    #gene from genbank
+    #I was pulling gene name from fasta description but other elements of description were being flagged as gene names (ex. H3)
     ingenes=FALSE
     gen=""
+    gene_pattern="gene=\"([^\"]+)\""
+    gen=str_replace(str_extract(gb,gene_pattern),gene_pattern,"\\1")
+    #in case gene is not explicitly listed, check product:
+    if(is.na(gen)){
+      pro_pattern="product=\"([^\"]+)\""
+      gen=str_replace(str_extract(gb,pro_pattern),pro_pattern,"\\1")
+    }
+    
     for(i in seq(length(genelookup$rawlist))){
       if(str_detect(des,as.character(genelookup$rawlist[i]))){
         lookup=as.character(genelookup$genelist[i])
@@ -161,10 +173,6 @@ for (i in seq(length(fasta))) {
     }
     gene=append(gene,gen)
     
-    
-    
-    #parse data from genbank file:
-    gb=genbank_vector[record]
     
     #accession from gb
     accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
