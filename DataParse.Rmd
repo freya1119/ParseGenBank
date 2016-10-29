@@ -125,41 +125,29 @@ for (i in seq(length(fasta))) {
     #if sequence was recorded for previous record, add it to the sequence vector
     if (i>1) {sequence=append(sequence,dna)}
     dna="" #reset dna
-    
+
     record=record+1 #track record number
-    
+
     #store fasta header
     fasta_header = append(fasta_header,line)
-    
+
     #parse fasta header
     header_split=strsplit(line, "|", fixed=TRUE)
-    
+
     #accession from fasta
     accession=append(accession,header_split[[1]][4])
-    
+
     #description from fasta
     des=str_trim(header_split[[1]][5], side="left")
     description=append(description,des)
-    
+
     #species name from fasta
     #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
     species_name=append(species_name,str_extract(des,"[A-Z][a-z]*[ .][cfa. ]{0,5}[a-z.]+"))
-    
-    #parse data from genbank file:
-    gb=genbank_vector[record]
-    
-    #gene from genbank
-    #I was pulling gene name from fasta description but other elements of description were being flagged as gene names (ex. H3)
+
+    #gene from fasta
     ingenes=FALSE
     gen=""
-    gene_pattern="gene=\"([^\"]+)\""
-    gen=str_replace(str_extract(gb,gene_pattern),gene_pattern,"\\1")
-    #in case gene is not explicitly listed, check product:
-    if(is.na(gen)){
-      product_pattern="product=\"([^\"]+)\""
-      gen=str_replace(str_extract(gb,pro_pattern),pro_pattern,"\\1")
-    }
-    
     for(i in seq(length(genelookup$rawlist))){
       if(str_detect(des,as.character(genelookup$rawlist[i]))){
         lookup=as.character(genelookup$genelist[i])
@@ -172,18 +160,22 @@ for (i in seq(length(fasta))) {
       others=append(others,des)
     }
     gene=append(gene,gen)
-    
-    
+
+
+
+    #parse data from genbank file:
+    gb=genbank_vector[record]
+
     #accession from gb
     accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
     acc_gb=str_replace(str_extract(gb,accession_pattern),accession_pattern,"\\1")
     accession_gb=append(accession_gb,acc_gb)
-    
+
     #organism from gb
     org_pattern="organism=\"([^\"]+)\""
     org=str_replace(str_extract(gb,org_pattern),org_pattern,"\\1")
     organism=append(organism,org)
-    
+
     #voucher number from gb
     vou_pattern="voucher=\"([^\",]*\\d[^\",]*)\""
     vou=str_replace(str_extract(gb,vou_pattern),vou_pattern,"\\1")
@@ -191,31 +183,31 @@ for (i in seq(length(fasta))) {
       if(str_detect(vou,"collection")){vou=NA}
     }
     voucher=append(voucher,vou)
-    
+
     #country from gb
     country_pat="country=\"([^\"]+)\""
     coun=str_replace(str_extract(gb,country_pat),country_pat,"\\1")
     country=append(country,coun)
-    
+
     #isolate number from gb
     iso_pattern="/isolate=\"([^\"]+)\""
     iso=str_replace(str_extract(gb,iso_pattern),iso_pattern,"\\1")
     isolate=append(isolate,iso)
-    
+
     #sequence length from gb
     bps=as.numeric(str_extract(str_extract(gb,"[:digit:]+ bp"),"[:digit:]+"))
     bp_length=append(bp_length,bps)
-    
+
     #taxon ID from gb
     tax=as.numeric(str_extract(str_extract(gb,"taxon:[:digit:]+"),"[:digit:]+"))
     taxon_id=append(taxon_id,tax)
-    
+
     #author and/or consortium for References 1-3 from gb
     reference_ends=c("REFERENCE","COMMENT","FEATURES")
     for(end in reference_ends){gb=str_replace_all(gb,end,paste("@",end,sep=""))}
     reference_keys=c("AUTHORS","CONSRTM","TITLE","JOURNAL")
     for(key in reference_keys){gb=str_replace_all(gb,key,paste("%",key,sep=""))}
-    
+
     #REFERENCES 1-3
     for (i in 1:3) {
       auth_pat=paste("REFERENCE ","[^@]+%AUTHORS ([^%]+) %",sep=as.character(i))
@@ -245,7 +237,7 @@ for (i in seq(length(fasta))) {
         journal_ref3=append(journal_ref3,journ)
       }
     }
-    
+
   } else {
     # if the line is not a header, add the line to dna
     dna=paste(dna,line,sep="")
@@ -257,7 +249,6 @@ df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,a
 
 print(others)
 df_others<-df[gene=="other",]
-
 ```
 
 ##Build Gene Table
