@@ -37,6 +37,14 @@ TAXA = "Isopoda.5genes"
 
 Total # of sequences: 28742 (29858 on 9/2/16)
 
+10/28/16: filter out "PREDICTED" (57 bad sequences "predicted" to be H. azteca out of 29956 total sequences) = 29899 sequences
+
+(Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED)
+
+10/28/16: filter out genome[Title] because we're not looking at whole mt genomes (113 genome sequences out of 29899 total sequences) = 29786
+
+(Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title])
+
 ```{r, eval=FALSE}
 TAXA = "Amphipoda.Isopoda.5genes"
 ```
