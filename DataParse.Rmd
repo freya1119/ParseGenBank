@@ -48,7 +48,7 @@ Total # of sequences: 28742 (29858 on 9/2/16)
 10/20/16: filter out UNVERIFIED sequences (103 sequences out of 29786 total) 
 = 29683 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
 
-(Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED)
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED)
 
 ```{r, eval=FALSE}
 TAXA = "Amphipoda.Isopoda.5genes"
@@ -277,7 +277,8 @@ sequence=append(sequence,dna)
 
 df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
-print(others)
+head(others)
+print(length(others))
 df_others<-df[gene=="other",]
 ```
 
