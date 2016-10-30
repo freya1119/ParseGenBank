@@ -46,7 +46,7 @@ Total # of sequences: 28742 (29858 on 9/2/16)
 (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title])
 
 10/20/16: filter out UNVERIFIED sequences (103 sequences out of 29786 total) 
-= 29683 sequences downloaded (sorted by accession)
+= 29683 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
 
 (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED)
 
