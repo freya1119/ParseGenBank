@@ -45,6 +45,11 @@ Total # of sequences: 28742 (29858 on 9/2/16)
 
 (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title])
 
+10/20/16: filter out UNVERIFIED sequences (103 sequences out of 29786 total) 
+= 29683 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
+
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED)
+
 ```{r, eval=FALSE}
 TAXA = "Amphipoda.Isopoda.5genes"
 ```
@@ -79,10 +84,17 @@ for(line in genbank){
   }
 }
 
+# genelookup= data.frame(
+#   rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","mito.*genome"),
+#   genelist=c("mt_COI","mt_COI","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_H3","mt_genome")
+# )
+
 genelookup= data.frame(
-  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","mito.*genome"),
-  genelist=c("mt_COI","mt_COI","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_H3","mt_genome")
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","18S","S18","28S","[Hh]3","[Hh]istone 3"),
+  genelist=c("mt_COI","mt_COI","mt_16S","n_18S","n_18S","n_28S","n_H3","n_H3")
 )
+
+#large/small subunit designations have been ambiguous - will look for explicit 16/18/28S designations
 
 #initiate vectors
 fasta_header=c()
@@ -145,11 +157,30 @@ for (i in seq(length(fasta))) {
     #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
     species_name=append(species_name,str_extract(des,"[A-Z][a-z]*[ .][cfa. ]{0,5}[a-z.]+"))
 
-    #gene from fasta
+    #parse data from genbank file:
+    gb=genbank_vector[record]    
+    
+    #gene from genbank
+    # was pulling gene name from fasta description but other elements of description were being flagged as gene names (ex. H3)
+    
+    gen_pattern="gene=\"[^\"]+\""
+    #extract all listed genes
+    rawgen=paste(str_extract_all(gb,gen_pattern)[[1]],collapse="")
+    pro_pattern="product=\"[^\"]+\""
+    #extract all listed products
+    rawpro=paste(str_extract_all(gb,pro_pattern)[[1]],collapse="")
+    rawgenpro=paste(rawgen,rawpro,collapse = "")
+    
+    if(str_length(rawgenpro)<2){
+      note_pattern="note=\"[^\"]+\""
+      rawnote=paste(str_extract_all(gb,note_pattern)[[1]],collapse="")
+      rawgenpro=rawnote
+    }
+
     ingenes=FALSE
     gen=""
     for(i in seq(length(genelookup$rawlist))){
-      if(str_detect(des,as.character(genelookup$rawlist[i]))){
+      if(str_detect(rawgenpro,as.character(genelookup$rawlist[i]))){
         lookup=as.character(genelookup$genelist[i])
         if(!str_detect(gen,lookup)){gen=paste(lookup,gen,sep=" ")}
         ingenes=TRUE
@@ -163,8 +194,7 @@ for (i in seq(length(fasta))) {
 
 
 
-    #parse data from genbank file:
-    gb=genbank_vector[record]
+
 
     #accession from gb
     accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
@@ -247,7 +277,8 @@ sequence=append(sequence,dna)
 
 df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
 
-print(others)
+head(others)
+print(length(others))
 df_others<-df[gene=="other",]
 ```
 
