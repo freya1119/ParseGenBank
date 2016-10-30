@@ -171,6 +171,16 @@ for (i in seq(length(fasta))) {
     rawpro=paste(str_extract_all(gb,pro_pattern)[[1]],collapse="")
     rawgenpro=paste(rawgen,rawpro,collapse = "")
     
+    #check rawgenpro for vague "subunit" designations
+    if(str_detect(gb,"mitochondrial")){
+      if(str_detect(rawgenpro,"large subunit")){rawgenpro=paste(rawgenpro,"16S",sep=" ")}
+      #if(str_detect(rawgenpro,"small subunit")){} #not needed as all are labeled 16S
+    }else{
+      if(str_detect(rawgenpro,"small subunit")){rawgenpro=paste(rawgenpro,"18S",sep="")}
+      if(str_detect(rawgenpro,"large subunit")){} #not needed as all are labeled 28S
+    }
+
+    #if no info in "gene" or "product", check for "note":
     if(str_length(rawgenpro)<2){
       note_pattern="note=\"[^\"]+\""
       rawnote=paste(str_extract_all(gb,note_pattern)[[1]],collapse="")
