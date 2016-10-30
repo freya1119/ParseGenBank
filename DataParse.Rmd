@@ -90,9 +90,10 @@ for(line in genbank){
 # )
 
 genelookup= data.frame(
-  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","18S","S18","28S","[Hh]3","[Hh]istone 3"),
-  genelist=c("mt_COI","mt_COI","mt_16S","n_18S","n_18S","n_28S","n_H3","n_H3")
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","18S","28S","[Hh]3","[Hh]istone 3"),
+  genelist=c("mt_COI","mt_COI","mt_16S","n_18S","n_28S","n_H3","n_H3")
 )
+# S18 does not equal 18S
 
 #large/small subunit designations have been ambiguous - will look for explicit 16/18/28S designations
 
