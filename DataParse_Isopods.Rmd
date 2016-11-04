@@ -11,7 +11,7 @@ NCBI nucleotide database: http://www.ncbi.nlm.nih.gov/nuccore
 698 Sequences downloaded on 11/4/2016 (sorted by accession, include GI # (impacts format of fasta header!))
 
 ```{r eval=FALSE}
-#TAXA = "Isopoda.5genes"
+TAXA = "Isopoda.5genes"
 ```
 
 ##Read Data into R
@@ -296,7 +296,7 @@ for (gene in genelist) {
   seqindex=locateColNames("sequence")
   
   for (i in seq(nrow(gene_df))){
-    if(i==1){begin=">"}else{begin="\n>"}
+    if(i==1){begin=">ISOPODA|"}else{begin="\n>ISOPODA|"}
     gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),"\n",gene_df[i,seqindex])
     #remove spaces and . from names
     gene_fasta[3]=str_replace_all(gene_fasta[3]," ","_")
