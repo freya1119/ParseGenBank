@@ -67,6 +67,21 @@ These sequences are long and contain very small pieces of multiple genes and are
 
 #### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454 or "internal transcribed spacer")
 
+1/26/17
+remove Unclassified Amphipoda: txid555092[Organism:exp] (696 total sequences)
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454 or "internal transcribed spacer") NOT txid555092[Organism:exp]
+20104 sequences on 1/26/17
+
+remove "unclassified" (removes 43 Chiltoniidae sp.)
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454 or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified) 
+20061 sequences on 1/26/17
+= 20061 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
+spreadsheet of data created for this dataset
+
+S18 does not equal 18S (Removes 1 sequence)
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454 or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+20244 sequences on 2/13/17
+= 20244 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
 
 ```{r eval=FALSE}
 TAXA = "Amphipoda.5genes"
@@ -226,7 +241,7 @@ for (i in seq(length(fasta))) {
 
 
     #accession from gb
-    accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
+    accession_pattern="ACCESSION ([A-Z]{1,2}\\d{5,6})"
     acc_gb=str_replace(str_extract(gb,accession_pattern),accession_pattern,"\\1")
     accession_gb=append(accession_gb,acc_gb)
 
@@ -329,8 +344,8 @@ for(i in seq(nrow(df))){
     g=""
   }
 }
-
-gene_table=df[,c(1:5,11)]
+#added 10 to line below to add bp_lentgh to gene_table
+gene_table=df[,c(1:5,10,11)]
 gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
 ```
 
@@ -350,7 +365,8 @@ for (gene in genelist) {
   
   locateColNames=function(x){which(colnames(gene_df) == x)}
   #return to accession instead of accession_gb due to NAs in accession_gb
-  headindex=sapply(c("taxon_id","species_name","accession"),locateColNames)
+  #switched from species_name to organism because more likely to reflect accepted name or other detail
+  headindex=sapply(c("taxon_id","organism","accession"),locateColNames)
   seqindex=locateColNames("sequence")
   
   for (i in seq(nrow(gene_df))){
@@ -412,6 +428,49 @@ for (gene in genelist) {
 
 ```
 
+##Create SICB list
+```{r, eval=FALSE}
+sicbList=readLines("SICB_accessions.txt")
+sicbList=str_split(sicbList,",")
+sicbList=unique(sicbList[[1]])
+```
+
+##Build Fasta File for SICB list
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+for (gene in genelist) {
+  #extract rows from df where genbank accession number is in gene vector:
+  gene_df=df[as.logical(do.call(match,list(df$accession,as.name(gene),0))),]
+  #extract rows from gene_df where genbank accession number is in sicbList vector:
+  sicb_gene_df=gene_df[gene_df$accession_gb %in% sicbList,]
+  filename=paste("sicb_",gene,".fasta",sep="")
+  fasta_file=file(filename,"at")
+  
+  locateColNames=function(x){which(colnames(sicb_gene_df) == x)}
+  #headindex=sapply(c("species_name","accession_gb"),locateColNames)
+  nameindex=locateColNames("species_name")
+  accessionindex=locateColNames("accession_gb")
+  seqindex=locateColNames("sequence")
+  
+  for (i in seq(nrow(sicb_gene_df))){
+    if(i==1){begin=">"}else{begin="\n>"}
+    gene_fasta=c(begin,sicb_gene_df[i,nameindex],"|",sicb_gene_df[i,accessionindex],"\n",sicb_gene_df[i,seqindex])
+    #remove spaces and . from names
+    gene_fasta[2]=str_replace_all(gene_fasta[2]," ","_")
+    gene_fasta[2]=str_replace_all(gene_fasta[2],fixed("."),"")
+  writeLines(gene_fasta,con=fasta_file,sep="")
+  }
+  
+  close(fasta_file)
+}
+
+```
+
 ##Build TaxonID table
 
 ```{r, eval=FALSE}
@@ -452,4 +511,49 @@ write.table(gene_table, gt_filename, sep="\t",row.names=FALSE)
 #taxonID table
 id_filename=paste(TAXA,"taxonIDtable.txt",sep=".")
 write.table(ID, id_filename, sep="\t",row.names=FALSE)
+```
+
+##Taxon Search
+
+
+```{r, eval=FALSE, tidy=TRUE}
+#Generate a list of Genera
+organism_list=unique(organism)
+genus_pattern="([^ ]*)"
+genera=c()
+for(i in organism_list){
+  genus=str_extract(i, genus_pattern)
+  genera=append(genera,genus)
+}
+genera=unique(genera)
+```
+
+```{r, eval=FALSE, tidy=TRUE}
+test=c(
+"Acanthoscina","Ctenoscina","Scina","Spinoscina"
+)
+count=0
+for(i in test){
+  if(i %in% genera){
+    print(i)
+    count=count+1
+  }
+}
+print(count)
+```
+
+
+```{r, eval=FALSE, tidy=TRUE}
+
+my_genera=readLines("mygenera.txt")
+
+count=0
+for(i in genera){
+  if(!(i %in% my_genera)){
+    print(i)
+    count=count+1
+  }
+}
+
+print(count)
 ```
