@@ -1,6 +1,41 @@
 ###Scrap Paper###
 #old code, test code, debugging code, etc.
 
+##Build Fasta File for Each Gene - old version
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+for (gene in genelist) {
+  #extract rows from df where accession number is in gene vector:
+  gene_df=df[as.logical(do.call(match,list(df$accession,as.name(gene),0))),]
+  filename=paste(gene,"fasta",sep=".")
+  fasta_file=file(filename,"at")
+  
+  locateColNames=function(x){which(colnames(gene_df) == x)}
+  #return to accession instead of accession_gb due to NAs in accession_gb
+  #switched from species_name to organism because more likely to reflect accepted name or other detail
+  headindex=sapply(c("taxon_id","organism","accession"),locateColNames)
+  seqindex=locateColNames("sequence")
+  
+  for (i in seq(nrow(gene_df))){
+    if(i==1){begin=">"}else{begin="\n>"}
+    gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),"\n",gene_df[i,seqindex])
+    #remove spaces and . from names
+    gene_fasta[3]=str_replace_all(gene_fasta[3]," ","_")
+    gene_fasta[3]=str_replace_all(gene_fasta[3],fixed("."),"")
+    writeLines(gene_fasta,con=fasta_file,sep="")
+  }
+  
+  close(fasta_file)
+}
+
+
+```
+
 # specify options for fasta files:
 #TAXA=scinidae; DATABASE=popset; FORMAT=fasta
 #TAXA=hyperia; DATABASE=nucleotide; FORMAT=fasta
