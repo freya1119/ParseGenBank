@@ -54,7 +54,7 @@ Total # of sequences: 28742 (29858 on 9/2/16)
 #### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454)
 
 ```{r, eval=FALSE}
-#TAXA = "Amphipoda.Isopoda.5genes"
+TAXA = "Amphipoda.Isopoda.5genes"
 ```
 
 11/4/2016 - Split Amphipoda and Isopoda search and parse in order to filter Isopoda for selected taxa:
@@ -94,6 +94,14 @@ add new sequences 3/15/2017-4/17/2017 (796 sequences addes) some also added to s
 = 21743 sequences downloaded on 4/17/2017 (sorted by accession, include GI # (impacts format of fasta header!))
 add new sequences 4/17/2017-5/5/2017 - some added to selected list as well
 = 21765 sequences downloaded on 5/5/2017 (sorted by accesssion, include GI # (impacts format of fasta header!))
+5/11/17 none to add
+7/25/17 = 22822 (some added to selected list)
+7/26/17 = 22822
+
+stop excluding UNVERIFIED sequences:
+#### Amphipoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+add 5 sequences, 2 added to selected list
+7/26/17 - 22827
 
 
 ```{r eval=FALSE}
@@ -103,11 +111,31 @@ TAXA = "Amphipoda.5genes"
 #### Isopoda[ORGN]  ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454 or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
 9929 sequences on 3/19/17
 = 9929 sequences downloaded (sorted by accession, include GI # (impacts format of fasta header!))
+= 11524 sequences on 7/24/17
+
+#### Isopoda[ORGN]  ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+Including 454 sequences
+= 11533 sequences on 7/24/17
+= 11533 sequences on 7/26/17
+
+#### Isopoda[ORGN]  ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+
+Stop excluding UNVERIFIED sequences:
+#### Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+adds ~100 sequences, a couple of H3 seqs added to selected list
+= 11638 on 7/26/17
 
 ```{r eval=FALSE}
-#TAXA = "Isopoda.5genes"
+TAXA = "Isopoda.5genes"
 ```
 
+
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
+
+8/8/17 = 34555 sequences downloaded (none added to selected list)
+```{r eval=FALSE}
+TAXA = "Amphipoda.Isopoda.5genes"
+```
 
 ##Read Data into R
 
@@ -535,6 +563,7 @@ write.table(ID, id_filename, sep="\t",row.names=FALSE)
 
 
 ```{r, eval=FALSE, tidy=TRUE}
+library(stringr)
 #Generate a list of Genera
 organism_list=unique(organism)
 genus_pattern="([^ ]*)"
@@ -548,7 +577,7 @@ genera=unique(genera)
 
 ```{r, eval=FALSE, tidy=TRUE}
 test=c(
-"Afrignathia","Bathygnathia","Bythognathia","Caecognathia","Elaphognathia","Euneognathia","Gibbagnathia","Gnathia","Monodgnathia","Paragnathia","Tenerognathia","Thaumastognathia"
+"Califarcturus","Spinarcturus","Thermoarcturus"
 )
 count=0
 for(i in test){
@@ -583,6 +612,15 @@ df_COI=df[!(is.na(str_match(df$gene,"mt_COI"))),]#######
 lenCOI=df_COI$bp_length
 densityCOI=density(lenCOI)
 plot(densityCOI)
+
+df_28S=df[!(is.na(str_match(df$gene,"n_28S"))),]
+len28S=df_28S$bp_length
+density28S=density(len28S)
+plot(density28S)
+
+df_28S_long1200=subset(df_28S,bp_length>=1200)
+df_28S_frag1200=subset(df_28S,bp_length<1200)
+
 
 
 ```
