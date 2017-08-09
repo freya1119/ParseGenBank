@@ -131,8 +131,8 @@ TAXA = "Isopoda.5genes"
 
 
 #### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
-
 8/8/17 = 34555 sequences downloaded (none added to selected list)
+
 ```{r eval=FALSE}
 TAXA = "Amphipoda.Isopoda.5genes"
 ```
