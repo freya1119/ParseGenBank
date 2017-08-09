@@ -1,0 +1,354 @@
+---
+title: "Parse GenBank Data"
+author: "Leann M. Biancani"
+output: pdf_document
+---
+#Download Data from GenBank:
+
+NCBI nucleotide database: http://www.ncbi.nlm.nih.gov/nuccore
+
+#### Isopod sequences searched using Isopod_Accession.txt
+698 Sequences downloaded on 11/4/2016 (sorted by accession, include GI # (impacts format of fasta header!))
+
+```{r eval=FALSE}
+TAXA = "Isopoda.5genes"
+```
+
+##Read Data into R
+
+```{r eval=FALSE}
+fasta_filename=paste(TAXA,"fasta",sep=".")
+genbank_filename=paste(TAXA,"gb",sep=".")
+
+#read data into R
+fasta=readLines(fasta_filename)
+genbank=readLines(genbank_filename)
+```
+
+##Parse Data
+
+```{r, eval=FALSE, tidy=TRUE}
+#load stringr library
+library(stringr)
+
+#create vector of genbank data
+genbank_vector=c()
+gb=""
+for(line in genbank){
+  gb=paste(gb,line,sep=" ")
+  if(line=="//"){
+  #if(str_detect(line,"//")){
+    gb=str_replace_all(gb," +"," ")
+    genbank_vector=append(genbank_vector,gb)
+    gb=""
+  }
+}
+
+# genelookup= data.frame(
+#   rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","large subunit.*mitochondrial","small subunit","18S","S18","28S","[Hh]3","[Hh]istone 3","mito.*genome"),
+#   genelist=c("mt_COI","mt_COI","mt_16S","mt_16S","n_18S","n_18S","n_18S","n_28S","n_H3","n_H3","mt_genome")
+# )
+
+genelookup= data.frame(
+  rawlist=c("[Cc]ytochrome [Cc ]{0,2}[Oo]xidase [subunit ]{0,8}[Ii1][^Ii1]","[Cc][Oo][Xx]{0,1}[Ii1][^Ii1]","16S","18S","28S","[Hh]3","[Hh]istone 3"),
+  genelist=c("mt_COI","mt_COI","mt_16S","n_18S","n_28S","n_H3","n_H3")
+)
+# S18 does not equal 18S
+
+#large/small subunit designations have been ambiguous - will look for explicit 16/18/28S designations
+
+#initiate vectors
+fasta_header=c()
+sequence=c()
+
+species_name=c()
+organism=c()
+accession=c()
+accession_gb=c()
+description=c()
+
+voucher=c()
+country=c()
+isolate=c()
+gene=c()
+bp_length=c()
+taxon_id=c()
+
+author_ref1=c()
+title_ref1=c()
+journal_ref1=c()
+
+author_ref2=c()
+title_ref2=c()
+journal_ref2=c()
+
+author_ref3=c()
+title_ref3=c()
+journal_ref3=c()
+
+others=c()
+
+#parse fasta (& genbank) data
+dna=""
+record=0
+for (i in seq(length(fasta))) {
+  line = fasta[i]
+  # if a header is detected:
+  if (str_detect(line,fixed(">"))){
+    #if sequence was recorded for previous record, add it to the sequence vector
+    if (i>1) {sequence=append(sequence,dna)}
+    dna="" #reset dna
+
+    record=record+1 #track record number
+
+    #store fasta header
+    fasta_header = append(fasta_header,line)
+
+    #parse fasta header
+    header_split=strsplit(line, "|", fixed=TRUE)
+
+    #accession from fasta
+    accession=append(accession,header_split[[1]][4])
+
+    #description from fasta
+    des=str_trim(header_split[[1]][5], side="left")
+    description=append(description,des)
+
+    #species name from fasta
+    #[cfa. ]{0,5} added to accomodate "Genus cf. species" and "Genus aff. species"
+    species_name=append(species_name,str_extract(des,"[A-Z][a-z]*[ .][cfa. ]{0,5}[a-z.]+"))
+
+    #parse data from genbank file:
+    gb=genbank_vector[record]    
+    
+    #gene from genbank
+    # was pulling gene name from fasta description but other elements of description were being flagged as gene names (ex. H3)
+    
+    gen_pattern="gene=\"[^\"]+\""
+    #extract all listed genes
+    rawgen=paste(str_extract_all(gb,gen_pattern)[[1]],collapse="")
+    pro_pattern="product=\"[^\"]+\""
+    #extract all listed products
+    rawpro=paste(str_extract_all(gb,pro_pattern)[[1]],collapse="")
+    rawgenpro=paste(rawgen,rawpro,collapse = "")
+    
+    #check rawgenpro for vague "subunit" designations
+    if(str_detect(gb,"mitochondrial")){
+      if(str_detect(rawgenpro,"large subunit")){rawgenpro=paste(rawgenpro,"16S",sep=" ")}
+      #if(str_detect(rawgenpro,"small subunit")){} #not needed as all are labeled 16S
+    }else{
+      if(str_detect(rawgenpro,"small subunit")){rawgenpro=paste(rawgenpro,"18S",sep="")}
+      if(str_detect(rawgenpro,"large subunit")){} #not needed as all are labeled 28S
+    }
+
+    #if no info in "gene" or "product", check for "note":
+    if(str_length(rawgenpro)<2){
+      note_pattern="note=\"[^\"]+\""
+      rawnote=paste(str_extract_all(gb,note_pattern)[[1]],collapse="")
+      rawgenpro=rawnote
+    }
+
+    ingenes=FALSE
+    gen=""
+    for(i in seq(length(genelookup$rawlist))){
+      if(str_detect(rawgenpro,as.character(genelookup$rawlist[i]))){
+        lookup=as.character(genelookup$genelist[i])
+        if(!str_detect(gen,lookup)){gen=paste(lookup,gen,sep=" ")}
+        ingenes=TRUE
+      }
+    }
+    if(!ingenes){
+      gen = "other"
+      others=append(others,des)
+    }
+    gene=append(gene,gen)
+
+
+
+
+
+    #accession from gb
+    accession_pattern="ACCESSION ([A-Z]{2}\\d{6})"
+    acc_gb=str_replace(str_extract(gb,accession_pattern),accession_pattern,"\\1")
+    accession_gb=append(accession_gb,acc_gb)
+
+    #organism from gb
+    org_pattern="organism=\"([^\"]+)\""
+    org=str_replace(str_extract(gb,org_pattern),org_pattern,"\\1")
+    organism=append(organism,org)
+
+    #voucher number from gb
+    vou_pattern="voucher=\"([^\",]*\\d[^\",]*)\""
+    vou=str_replace(str_extract(gb,vou_pattern),vou_pattern,"\\1")
+    if(!is.na(vou)){
+      if(str_detect(vou,"collection")){vou=NA}
+    }
+    voucher=append(voucher,vou)
+
+    #country from gb
+    country_pat="country=\"([^\"]+)\""
+    coun=str_replace(str_extract(gb,country_pat),country_pat,"\\1")
+    country=append(country,coun)
+
+    #isolate number from gb
+    iso_pattern="/isolate=\"([^\"]+)\""
+    iso=str_replace(str_extract(gb,iso_pattern),iso_pattern,"\\1")
+    isolate=append(isolate,iso)
+
+    #sequence length from gb
+    bps=as.numeric(str_extract(str_extract(gb,"[:digit:]+ bp"),"[:digit:]+"))
+    bp_length=append(bp_length,bps)
+
+    #taxon ID from gb
+    tax=as.numeric(str_extract(str_extract(gb,"taxon:[:digit:]+"),"[:digit:]+"))
+    taxon_id=append(taxon_id,tax)
+
+    #author and/or consortium for References 1-3 from gb
+    reference_ends=c("REFERENCE","COMMENT","FEATURES")
+    for(end in reference_ends){gb=str_replace_all(gb,end,paste("@",end,sep=""))}
+    reference_keys=c("AUTHORS","CONSRTM","TITLE","JOURNAL")
+    for(key in reference_keys){gb=str_replace_all(gb,key,paste("%",key,sep=""))}
+
+    #REFERENCES 1-3
+    for (i in 1:3) {
+      auth_pat=paste("REFERENCE ","[^@]+%AUTHORS ([^%]+) %",sep=as.character(i))
+      cons_pat=paste("REFERENCE ","[^@]+%CONSRTM ([^%]+) %",sep=as.character(i))
+      title_pat=paste("REFERENCE ","[^@]+%TITLE ([^%]+) %",sep=as.character(i))
+      journ_pat=paste("REFERENCE ","[^@]+%JOURNAL ([^%@]+) [%@]",sep=as.character(i))
+      auth= str_replace(str_extract(gb,auth_pat),auth_pat,"\\1")
+      cons= str_replace(str_extract(gb,cons_pat),cons_pat,"\\1")
+      title= str_replace(str_extract(gb,title_pat),title_pat,"\\1")
+      journ= str_replace(str_extract(gb,journ_pat),journ_pat,"\\1")
+      if(is.na(auth)){
+        auth=cons # in case consortium listed but no author
+      }else if(!is.na(cons)){
+        auth=paste(auth,cons,sep=", ") # in case author & consortium listed (never?)
+      }
+      if(i==1){
+        author_ref1=append(author_ref1,auth)
+        title_ref1=append(title_ref1,title)
+        journal_ref1=append(journal_ref1,journ)
+      }else if(i==2){
+        author_ref2=append(author_ref2,auth)
+        title_ref2=append(title_ref2,title)
+        journal_ref2=append(journal_ref2,journ)
+      }else if(i==3){
+        author_ref3=append(author_ref3,auth)
+        title_ref3=append(title_ref3,title)
+        journal_ref3=append(journal_ref3,journ)
+      }
+    }
+
+  } else {
+    # if the line is not a header, add the line to dna
+    dna=paste(dna,line,sep="")
+  }
+}
+sequence=append(sequence,dna)
+
+df=data.frame(species_name,organism,taxon_id,voucher,isolate,country,accession,accession_gb,gene,bp_length,author_ref1,title_ref1,journal_ref1,author_ref2,title_ref2,journal_ref2,author_ref3,title_ref3,journal_ref3,description,fasta_header,sequence,stringsAsFactors=FALSE)
+
+head(others)
+print(length(others))
+df_others<-df[gene=="other",]
+```
+
+##Build Gene Table
+
+```{r, eval=FALSE, tidy=TRUE}
+
+genelist=append((unique(as.character(genelookup$genelist))),"other")
+
+#initialize gene vectors:
+for(gene in genelist) {assign(gene,c())}
+
+g=""
+for(i in seq(nrow(df))){
+  entry=as.character(df$gene[i])
+  for(gene in genelist){
+    if(str_detect(entry,gene)){g=df$accession[i]}
+    assign(gene,do.call(append,list(as.name(gene),g)))
+    g=""
+  }
+}
+
+gene_table=df[,c(1:5,11)]
+gene_table=data.frame(gene_table,do.call(cbind,lapply(genelist,as.name)),stringsAsFactors = FALSE)
+```
+
+##Build Fasta File for Each Gene
+
+```{r, eval=FALSE}
+## for testing, backup df:
+#df_backup=df
+## create smaller df:
+#df=df[seq(1,nrow(df),100),]
+
+for (gene in genelist) {
+  #extract rows from df where accession number is in gene vector:
+  gene_df=df[as.logical(do.call(match,list(df$accession,as.name(gene),0))),]
+  filename=paste(gene,"fasta",sep=".")
+  fasta_file=file(filename,"at")
+  
+  locateColNames=function(x){which(colnames(gene_df) == x)}
+  #return to accession instead of accession_gb due to NAs in accession_gb
+  headindex=sapply(c("taxon_id","species_name","accession"),locateColNames)
+  seqindex=locateColNames("sequence")
+  
+  for (i in seq(nrow(gene_df))){
+    if(i==1){begin=">ISOPODA|"}else{begin="\n>ISOPODA|"}
+    gene_fasta=c(begin,sapply(as.character(gene_df[i,headindex]),paste,"|",sep=""),"\n",gene_df[i,seqindex])
+    #remove spaces and . from names
+    gene_fasta[3]=str_replace_all(gene_fasta[3]," ","_")
+    gene_fasta[3]=str_replace_all(gene_fasta[3],fixed("."),"")
+    writeLines(gene_fasta,con=fasta_file,sep="")
+  }
+  
+  close(fasta_file)
+}
+
+
+```
+
+
+##Build TaxonID table
+
+```{r, eval=FALSE}
+
+ID_table=gene_table[,c(1:3,7:ncol(gene_table))]
+
+ID=aggregate(ID_table, by=list(ID_table$taxon_id), unique)
+
+#remove Group.1 row
+ID=ID[,c(2:ncol(ID))]
+
+#turn lists into character strings & cleanup:
+for(i in seq(nrow(ID))){
+  for(j in seq(ncol(ID))){
+    cell = ID[i,j]
+    if(!is.na(cell)){
+      cell = paste(c(cell[[1]]), collapse=", ")
+      cell = str_replace(cell,", $","")
+      cell = str_replace(cell,"^, ","")
+      ID[i,j]=(cell)
+    }
+  }
+}
+
+ID[] = lapply(ID, as.character)
+ID[] = transform(ID, taxon_id = as.numeric(taxon_id))
+```
+
+##Output Data
+
+```{r, eval=FALSE, tidy=TRUE}
+#parsed data table
+df_filename=paste(TAXA,"alldata.txt",sep=".")
+write.table(df, df_filename, sep="\t",row.names=FALSE)
+#gene table
+gt_filename=paste(TAXA,"genetable.txt",sep=".")
+write.table(gene_table, gt_filename, sep="\t",row.names=FALSE)
+#taxonID table
+id_filename=paste(TAXA,"taxonIDtable.txt",sep=".")
+write.table(ID, id_filename, sep="\t",row.names=FALSE)
+```
