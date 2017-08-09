@@ -380,6 +380,7 @@ df_others<-df[gene=="other",]
 ##Build Gene Table
 
 ```{r, eval=FALSE, tidy=TRUE}
+library(stringr)
 
 genelist=append((unique(as.character(genelookup$genelist))),"other")
 
