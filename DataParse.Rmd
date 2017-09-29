@@ -23,7 +23,7 @@ Total # of sequences: 337
 Total # of sequences: 19617
 
 ```{r, eval=FALSE}
-TAXA = "Amphipoda.5genes"
+#TAXA = "Amphipoda.5genes"
 ```
 
 #### Isopoda[ORGN] ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT Environmental samples[ORGN]
@@ -55,7 +55,7 @@ Total # of sequences: 28742 (29858 on 9/2/16)
 #### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S or S18) or (28S) or (H3)) NOT (Environmental samples[ORGN] or PREDICTED or genome[Title] or UNVERIFIED or 454)
 
 ```{r, eval=FALSE}
-TAXA = "Amphipoda.Isopoda.5genes"
+#TAXA = "Amphipoda.Isopoda.5genes"
 ```
 
 11/4/2016 - Split Amphipoda and Isopoda search and parse in order to filter Isopoda for selected taxa:
@@ -135,6 +135,8 @@ TAXA = "Isopoda.5genes"
 8/8/17 = 34555 sequences downloaded (none added to selected list)
 
 9/27/17 = 34586 sequences downloaded (some added to selected list)
+Next update, remove restriction on PREDICTED genes (all Hyalella, so not vital right now, but currently using on in selected list so shouln't exclude them - only about 57 total as of 9/28/17)
+#### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
 
 
 ```{r eval=FALSE}
