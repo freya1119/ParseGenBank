@@ -136,6 +136,7 @@ TAXA = "Isopoda.5genes"
 
 9/27/17 = 34586 sequences downloaded (some added to selected list)
 Next update, remove restriction on PREDICTED genes (all Hyalella, so not vital right now, but currently using on in selected list so shouln't exclude them - only about 57 total as of 9/28/17)
+
 #### (Amphipoda[ORGN] or Isopoda[ORGN]) ((coi or co1 or coxi or cox1 or "cytochrome oxidase subunit 1" or "cytochrome oxidase subunit i" or "cytochrome oxidase i" or "cytochrome c oxidase subunit 1" or "cytochrome c oxidase subunit i") or (("large subunit" mitochondrial) or 16S) or (("small subunit" not mitochondrial) or 18S) or 28S or (H3)) NOT (Environmental samples[ORGN] or genome[Title] or "internal transcribed spacer" or txid555092[Organism:exp] or unclassified)
 
 
